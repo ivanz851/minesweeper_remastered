@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Minesweeper</string>
+    <string name="high_score">High Score: 0</string>
+    <string name="score">Score: %1$d</string>
+    <string name="score_default">Score: %d</string>
+    <string name="high_score_text">High Score: %1$d</string>
+    <string name="time">Time: %d</string>
+    <string name="main_btn_start">Start</string>
+    <string name="main_btn_about">About</string>
+    <string name="main_btn_exit">Exit</string>
+    <string name="about_text">Credits:\nIvan Zakharov\nIvan.zakharov.ru@yandex.ru\n</string>
+    <string name="btn_to_main_menu">Back to main menu</string>
+
+    <string name="app_name_after">MINESWEEPER</string>
+
+    <string name="btn_sign_in">Sign in</string>
+    <string name="btn_sign_up">Sign up</string>
+</resources>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="@drawable/bg_soldier"
+    android:id="@+id/root_element"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/suez_one"
+                android:text="MINE"
+                android:textAlignment="center"
+                android:textColor="@color/red"
+                android:textSize="50sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/suez_one"
+                android:text="SWEEPER"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="50sp" />
+        </LinearLayout>
+
+        <Button
+            android:layout_marginTop="10dp"
+            android:id="@+id/main_btn_start"
+            android:layout_width="match_parent"
+            android:layout_height="100sp"
+            android:onClick="onClick"
+
+            android:backgroundTint="@color/btn_standard_color"
+
+            android:fontFamily="@font/suez_one"
+            android:text="@string/main_btn_start"
+            android:textSize="30sp"
+            android:textColor="@android:color/white"
+            />
+
+        <Button
+            android:id="@+id/main_btn_about"
+            android:layout_width="match_parent"
+            android:layout_height="100sp"
+            android:onClick="onClick"
+
+            android:backgroundTint="@color/btn_standard_color"
+
+            android:fontFamily="@font/suez_one"
+            android:text="About"
+            android:textSize="30sp"
+            android:textColor="@android:color/white"
+            />
+
+        <Button
+            android:id="@+id/main_btn_exit"
+            android:layout_width="match_parent"
+            android:layout_height="100sp"
+            android:onClick="onClick"
+
+            android:backgroundTint="@color/btn_standard_color"
+
+            android:fontFamily="@font/suez_one"
+            android:text="Exit"
+            android:textSize="30sp"
+            android:textColor="@android:color/white"
+            />
+
+        <LinearLayout
+            android:layout_marginTop="0dp"
+            android:layout_width="match_parent"
+            android:weightSum="2"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_sign_in"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_sign_in"
+                android:fontFamily="@font/suez_one"
+                android:text="@string/btn_sign_in"
+                android:textSize="30sp"
+                android:textColor="@android:color/white"
+                android:onClick="onClick"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_sign_up"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_sign_up"
+                android:fontFamily="@font/suez_one"
+                android:text="@string/btn_sign_up"
+                android:textSize="30sp"
+                android:textColor="@android:color/white"
+                android:onClick="onClick"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
