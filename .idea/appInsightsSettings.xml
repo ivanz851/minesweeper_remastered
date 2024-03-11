@@ -9,9 +9,9 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.ivanz851.minesweeper" />
-                  <option name="mobileSdkAppId" value="1:863011928675:android:acbe37cef9f2c1b2145656" />
-                  <option name="projectId" value="minesweeper-for-android-7fba3" />
-                  <option name="projectNumber" value="863011928675" />
+                  <option name="mobileSdkAppId" value="1:1024959107236:android:5cc6dc9ec9b8910d6a5631" />
+                  <option name="projectId" value="minesweeper-1af6d" />
+                  <option name="projectNumber" value="1024959107236" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

@@ -5,24 +5,16 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.common.AccountPicker
 import android.widget.Button
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.play.integrity.internal.e
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.app
 import com.ivanz851.minesweeper.Models.User
 import com.rengwuxian.materialedittext.MaterialEditText
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-
 
 class MainActivity : AppCompatActivity() {
     private lateinit var btnSignIn: Button
@@ -72,14 +64,14 @@ class MainActivity : AppCompatActivity() {
         dialog.setNegativeButton("Cancel") { dialogInterface, _ ->
             dialogInterface.dismiss()
         }
-        dialog.setPositiveButton("Enter") { dialogInterface, _ ->
+        dialog.setPositiveButton("Enter") { _, _ ->
             if (TextUtils.isEmpty(email.text.toString())) {
-                Snackbar.make(root, "Enter your email", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(root, "Enter your email", Snackbar.LENGTH_LONG).show()
                 return@setPositiveButton
             }
 
             if (password.text.toString().length < 8) {
-                Snackbar.make(root, "Enter password longer than 8 symbols", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(root, "Enter password longer than 8 symbols", Snackbar.LENGTH_LONG).show()
                 return@setPositiveButton
             }
 
@@ -119,28 +111,28 @@ class MainActivity : AppCompatActivity() {
         dialog.setNegativeButton("Cancel") { dialogInterface, _ ->
             dialogInterface.dismiss()
         }
-        dialog.setPositiveButton("Add") { dialogInterface, _ ->
+        dialog.setPositiveButton("Add") { _, _ ->
             if (TextUtils.isEmpty(email.text.toString())) {
-                Snackbar.make(root, "Enter your email", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(root, "Enter your email", Snackbar.LENGTH_LONG).show()
                 return@setPositiveButton
             }
             if (TextUtils.isEmpty(name.text.toString())) {
-                Snackbar.make(root, "Enter your name", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(root, "Enter your name", Snackbar.LENGTH_LONG).show()
                 return@setPositiveButton
             }
             if (TextUtils.isEmpty(phone.text.toString())) {
-                Snackbar.make(root, "Enter your phone", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(root, "Enter your phone", Snackbar.LENGTH_LONG).show()
                 return@setPositiveButton
             }
             if (password.text.toString().length < 8) {
-                Snackbar.make(root, "Enter password longer than 8 symbols", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(root, "Enter password longer than 8 symbols", Snackbar.LENGTH_LONG).show()
                 return@setPositiveButton
             }
 
             // Registration successful
             auth.createUserWithEmailAndPassword(email.text.toString(), password.text.toString())
-                .addOnSuccessListener { authResult ->
-                    val user : User = User()
+                .addOnSuccessListener {
+                    val user = User()
                     user.setEmail(email.text.toString())
                     user.setName(name.text.toString())
                     user.setPassword(password.text.toString())
