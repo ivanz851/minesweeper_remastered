@@ -6,7 +6,7 @@ class User {
     private lateinit var password: String
     private lateinit var phone: String
     
-    private var best_score: Int = 0
+    private var bestScore: Int = 0
     
 
     constructor() {
@@ -49,9 +49,9 @@ class User {
     }
 
     fun getBestScore(): Int {
-        return best_score
+        return bestScore
     }
-    fun setBestScore(best_score: Int) {
-        this.best_score = best_score
+    fun setBestScore(bestScore: Int) {
+        this.bestScore = bestScore
     }
 }

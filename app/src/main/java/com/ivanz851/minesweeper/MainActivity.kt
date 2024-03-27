@@ -138,6 +138,9 @@ class MainActivity : AppCompatActivity() {
                     user.setPassword(password.text.toString())
                     user.setPhone(phone.text.toString())
 
+
+                    Snackbar.make(root, "Hello MOTHERFUCKERS!", Snackbar.LENGTH_LONG).show()
+
                     FirebaseAuth.getInstance().currentUser?.let {
                         users.child(it.uid)
                             .setValue(user)
