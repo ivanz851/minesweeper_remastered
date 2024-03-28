@@ -13,7 +13,20 @@
           "package_name": "com.ivanz851.minesweeper"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1024959107236-14jk56rm91snj4l42553p0odvqnujdov.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ivanz851.minesweeper",
+            "certificate_hash": "f2f904290abd1926526749d8f2033bb80601df1c"
+          }
+        },
+        {
+          "client_id": "1024959107236-1h421a50djv6doa8o0j9ua901grhmp04.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAXHff0FKqfM-D43awX8gtVvcrhKMWCdUQ"
@@ -21,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1024959107236-1h421a50djv6doa8o0j9ua901grhmp04.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
