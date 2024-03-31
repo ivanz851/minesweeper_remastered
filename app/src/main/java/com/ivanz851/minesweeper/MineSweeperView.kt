@@ -110,9 +110,9 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
     }
 
     @SuppressLint("DrawAllocation")
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas?.apply {
+        canvas.apply {
 
             verticalOffset = (height - boardPixelHeight) / 2f
             horizontalOffset = (width - boardPixelWidth) / 2f
