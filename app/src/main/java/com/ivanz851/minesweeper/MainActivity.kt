@@ -1,6 +1,5 @@
 package com.ivanz851.minesweeper
 
-import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
@@ -12,7 +11,6 @@ import android.widget.RelativeLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -25,12 +23,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.ivanz851.minesweeper.Models.User
 import com.ivanz851.minesweeper.databinding.ActivityMainBinding
 import com.rengwuxian.materialedittext.MaterialEditText
-
-
 import android.content.ContentValues.TAG
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-
 
 class MainActivity : AppCompatActivity() {
     private lateinit var btnSignIn: Button
@@ -85,6 +78,7 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
