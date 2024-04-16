@@ -51,13 +51,6 @@ class MainActivity : AppCompatActivity() {
         db = FirebaseDatabase.getInstance()
         users = db.getReference("Users")
 
-        btnSignUp.setOnClickListener {
-            showRegisterWindow()
-        }
-        btnSignIn.setOnClickListener {
-            showSignInWindow()
-        }
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -70,6 +63,13 @@ class MainActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
         binding.btnSignInGoogle.setOnClickListener {
             signIn()
+        }
+
+        binding.btnSignUp.setOnClickListener {
+            showRegisterWindow()
+        }
+        binding.btnSignIn.setOnClickListener {
+            showSignInWindow()
         }
     }
 

@@ -3,6 +3,7 @@ package com.ivanz851.minesweeper
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.google.firebase.auth.FirebaseAuth
 import com.ivanz851.minesweeper.MainActivity.Companion.EXTRA_NAME
 import com.ivanz851.minesweeper.databinding.ActivityGoogleSignInBinding
 import com.google.firebase.auth.ktx.auth
@@ -19,9 +20,10 @@ class GoogleSignInActivity : AppCompatActivity() {
 
         binding.textDisplayName.text = intent.getStringExtra(EXTRA_NAME)
         binding.logout228.setOnClickListener {
-            Firebase.auth.signOut()
+            FirebaseAuth.getInstance().signOut()
 
-            val intent = Intent(applicationContext, MainActivity::class.java)
+            finish()
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 
