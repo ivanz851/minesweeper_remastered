@@ -24,6 +24,9 @@
     <color name="btn_standard_color">#FF3700B3</color>
 
 
+    <!-- Google button -->
+    <color name="black_login">#000000</color>
+    <color name="background_login_screen">#EFEFEF</color>
 
 
 </resources>
