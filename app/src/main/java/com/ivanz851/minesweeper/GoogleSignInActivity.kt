@@ -18,10 +18,16 @@ class GoogleSignInActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.textDisplayName.text = intent.getStringExtra(EXTRA_NAME)
-        binding.logout.setOnClickListener {
+        binding.logout228.setOnClickListener {
             Firebase.auth.signOut()
 
             val intent = Intent(applicationContext, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.back.setOnClickListener {
+            finish()
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
     }
