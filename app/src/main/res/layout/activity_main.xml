@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="top"
     android:orientation="vertical"
     android:background="@drawable/bg_soldier"
@@ -88,76 +88,76 @@
             android:textSize="30sp"
             android:textColor="@android:color/white"
             />
-
-        <LinearLayout
-            android:layout_marginTop="0dp"
-            android:layout_width="match_parent"
-            android:weightSum="2"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_sign_in"
-                android:layout_width="wrap_content"
-                android:layout_height="100dp"
-                android:layout_marginEnd="6dp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_sign_in"
-                android:fontFamily="@font/suez_one"
-
-                android:text="@string/btn_sign_in"
-                android:textSize="30sp"
-                android:textColor="@android:color/white"
-                android:onClick="onClick"
-                />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_sign_up"
-                android:layout_width="wrap_content"
-                android:layout_height="100dp"
-                android:layout_marginStart="6dp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_sign_up"
-                android:fontFamily="@font/suez_one"
-                android:text="@string/btn_sign_up"
-                android:textSize="30sp"
-                android:textColor="@android:color/white"
-                android:onClick="onClick"
-                />
-        </LinearLayout>
-
-
-
-        <LinearLayout
-            android:layout_marginTop="0dp"
-            android:layout_width="200dp"
-            android:weightSum="2"
-            android:id="@+id/socialicons"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:background="#80077a05"
-
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_margin="20dp"
-                android:layout_weight="1"
-                android:id="@+id/btn_sign_in_google"
-                android:src="@drawable/google"/>
-            <ImageView
-                android:background="#80077a05"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_margin="20dp"
-                android:layout_weight="1"
-                android:id="@+id/vk_btn"
-                android:src="@drawable/vk"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_height="0dp" android:layout_width="0dp"/>
-
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="0dp"
+        android:layout_width="match_parent"
+        android:weightSum="2"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/sign_in_buttons_layout"
+        android:layout_above="@id/socialicons">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_sign_in"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_sign_in"
+            android:fontFamily="@font/suez_one"
+
+            android:text="@string/btn_sign_in"
+            android:textSize="30sp"
+            android:textColor="@android:color/white"
+            android:onClick="onClick"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_sign_up"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_marginStart="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_sign_up"
+            android:fontFamily="@font/suez_one"
+            android:text="@string/btn_sign_up"
+            android:textSize="30sp"
+            android:textColor="@android:color/white"
+            android:onClick="onClick"
+            />
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_marginTop="0dp"
+        android:layout_width="match_parent"
+        android:weightSum="2"
+        android:id="@+id/socialicons"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"> <!-- Центрирование элементов по горизонтали -->
+
+        <ImageView
+            android:background="#80077a05"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:id="@+id/btn_sign_in_google"
+            android:src="@drawable/google"/>
+        <ImageView
+            android:background="#80077a05"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:id="@+id/vk_btn"
+            android:src="@drawable/vk" />
+    </LinearLayout>
+
 
 </RelativeLayout>
