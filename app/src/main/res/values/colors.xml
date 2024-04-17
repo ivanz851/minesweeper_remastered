@@ -20,8 +20,9 @@
 
     <color name="green">#4CAF50</color>
     <color name="red">#E62517</color>
+    <color name="blue">#0e25b5</color>
 
-    <color name="btn_standard_color">#FF3700B3</color>
+    <color name="btn_standard_color">#603700B3</color>
 
 
     <!-- Google button -->
