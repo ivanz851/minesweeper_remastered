@@ -77,4 +77,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-database-ktx'
 
     implementation("com.google.android.gms:play-services-auth:21.0.0")
+
+    implementation("com.yandex.android:mobileads:5.7.0")
+
+
 }
