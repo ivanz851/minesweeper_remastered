@@ -78,11 +78,6 @@
                 app:layout_constraintTop_toBottomOf="@id/tvScore"
                 />
 
-            <!-- <com.yandex.mobile.ads.banner.BannerAdView
-                android:id="@+id/banner_epta"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-                -->
             <Button
                 android:id="@+id/btn_to_main_menu"
                 android:layout_width="wrap_content"
@@ -97,6 +92,12 @@
                 android:textSize="15sp"
                 tools:layout_editor_absoluteX="102dp"
                 tools:layout_editor_absoluteY="630dp" />
+
+            <com.yandex.mobile.ads.banner.BannerAdView
+                android:id="@+id/banner188"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
 
 
