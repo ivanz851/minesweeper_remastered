@@ -72,8 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_below="@id/topLinearLayout"
-            android:layout_above="@id/bottomLinearLayout"
-            android:layout_weight="1" />
+            android:layout_above="@id/bottomLinearLayout" />
 
 
         <LinearLayout
