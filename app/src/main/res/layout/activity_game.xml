@@ -70,23 +70,56 @@
         <com.ivanz851.minesweeper.MineSweeperView
             android:id="@+id/mineSweeperView"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="0dp"
             android:layout_below="@id/topLinearLayout"
-            android:layout_above="@id/btn_to_main_menu"
-            />
+            android:layout_above="@id/bottomLinearLayout"
+            android:layout_weight="1" />
 
-        <Button
-            android:id="@+id/btn_to_main_menu"
+
+        <LinearLayout
+            android:id="@+id/bottomLinearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/btn_standard_color"
-            android:fontFamily="@font/suez_one"
-            android:onClick="onClick"
-            android:text="Back to main menu"
-            android:textColor="@android:color/white"
-            android:textSize="15sp"
+            android:orientation="horizontal"
             android:layout_above="@id/banner188"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp">
+
+
+
+            <ImageView
+                android:background="#80077a05"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="20dp"
+                android:layout_weight="1"
+                android:id="@+id/settings_btn"
+                android:src="@drawable/settings_icon"/>
+
+            <Button
+                android:id="@+id/btn_to_main_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/btn_standard_color"
+                android:fontFamily="@font/suez_one"
+                android:onClick="onClick"
+                android:text="Back to main menu"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="2"/>
+
+            <ImageView
+                android:background="@color/white"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="20dp"
+                android:layout_weight="1"
+                android:id="@+id/hint_btn"
+                android:src="@drawable/hint_icon" />
+        </LinearLayout>
+
+
 
 
         <com.yandex.mobile.ads.banner.BannerAdView
