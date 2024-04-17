@@ -2,6 +2,7 @@
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -58,34 +59,47 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <com.ivanz851.minesweeper.MineSweeperView
-            android:id="@+id/mineSweeperView"
-            android:layout_width="wrap_content"
-            android:layout_height="300pt"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvScore"
-            />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="80dp"
             android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            android:orientation="vertical">
+
+            <com.ivanz851.minesweeper.MineSweeperView
+                android:id="@+id/mineSweeperView"
+                android:layout_width="wrap_content"
+                android:layout_height="200pt"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvScore"
+                />
+
             <Button
                 android:id="@+id/btn_to_main_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onClick"
-
                 android:backgroundTint="@color/btn_standard_color"
 
                 android:fontFamily="@font/suez_one"
+
+                android:onClick="onClick"
                 android:text="Back to main menu"
+                android:textColor="@android:color/white"
                 android:textSize="15sp"
-                android:textColor="@android:color/white"/>
+                tools:layout_editor_absoluteX="102dp"
+                tools:layout_editor_absoluteY="630dp" />
+
+            <com.yandex.mobile.ads.banner.BannerAdView
+                android:id="@+id/banner188"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

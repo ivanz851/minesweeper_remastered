@@ -24,6 +24,11 @@ import com.ivanz851.minesweeper.Models.User
 import com.ivanz851.minesweeper.databinding.ActivityMainBinding
 import com.rengwuxian.materialedittext.MaterialEditText
 import android.content.ContentValues.TAG
+import com.yandex.mobile.ads.banner.AdSize
+import com.yandex.mobile.ads.banner.BannerAdEventListener
+import com.yandex.mobile.ads.common.AdRequest
+import com.yandex.mobile.ads.common.MobileAds
+import com.yandex.mobile.ads.banner.BannerAdView
 
 class MainActivity : AppCompatActivity() {
     private lateinit var btnSignIn: Button
@@ -40,27 +45,27 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setupBinding()
+        setupViews()
+    }
 
-        btnSignIn = findViewById(R.id.btn_sign_in)
-        btnSignUp = findViewById(R.id.btn_sign_up)
+    private fun setupBinding() {
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+    }
 
-        root = findViewById(R.id.root_element)
-
+    private fun setupViews() {
         auth = FirebaseAuth.getInstance()
         db = FirebaseDatabase.getInstance()
         users = db.getReference("Users")
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        // Configure Google SignIn
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("1024959107236-1h421a50djv6doa8o0j9ua901grhmp04.apps.googleusercontent.com")
             .requestEmail()
             .build()
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+
         binding.btnSignInGoogle.setOnClickListener {
             signIn()
         }
@@ -68,8 +73,25 @@ class MainActivity : AppCompatActivity() {
         binding.btnSignUp.setOnClickListener {
             showRegisterWindow()
         }
+
         binding.btnSignIn.setOnClickListener {
             showSignInWindow()
+        }
+
+        binding.mainBtnStart.setOnClickListener {
+            val intent = Intent(this, GameActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        binding.mainBtnAbout.setOnClickListener {
+            val intent = Intent(this, AboutActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        binding.mainBtnExit.setOnClickListener {
+            finish()
         }
     }
 
@@ -173,7 +195,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showRegisterWindow() {
-        val dialog : AlertDialog.Builder = AlertDialog.Builder(this)
+        val dialog: AlertDialog.Builder = AlertDialog.Builder(this)
         dialog.setTitle("Sign up")
         dialog.setMessage("Enter your registration data")
 
@@ -204,7 +226,8 @@ class MainActivity : AppCompatActivity() {
                 return@setPositiveButton
             }
             if (password.text.toString().length < 8) {
-                Snackbar.make(root, "Enter password longer than 8 symbols", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(root, "Enter password longer than 8 symbols", Snackbar.LENGTH_LONG)
+                    .show()
                 return@setPositiveButton
             }
 
@@ -224,36 +247,20 @@ class MainActivity : AppCompatActivity() {
                         users.child(it.uid)
                             .setValue(user)
                             .addOnSuccessListener {
-                                Snackbar.make(root, "User successfully added!", Snackbar.LENGTH_LONG).show()
+                                Snackbar.make(
+                                    root,
+                                    "User successfully added!",
+                                    Snackbar.LENGTH_LONG
+                                ).show()
                             }
                     }
                 }
                 .addOnFailureListener { e ->
-                    Snackbar.make(root, "Registration ERROR! ${e.message}", Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(root, "Registration ERROR! ${e.message}", Snackbar.LENGTH_LONG)
+                        .show()
                 }
 
         }
-
         dialog.show()
     }
-
-
-    fun onClick(p0: View?) {
-        when (p0!!.id) {
-            R.id.main_btn_start -> {
-                val intent = Intent(this, GameActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-            R.id.main_btn_about -> {
-                val intent = Intent(this, AboutActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-            //R.id.btn_sign_up -> showRegisterWindow()
-            R.id.main_btn_exit -> finish()
-        }
-    }
-
-
 }

@@ -4,10 +4,15 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.yandex.mobile.ads.banner.AdSize
+import com.yandex.mobile.ads.banner.BannerAdView
+import com.yandex.mobile.ads.common.AdRequest
+import com.yandex.mobile.ads.common.MobileAds
 
 class GameActivity : AppCompatActivity(), MineSweeperView.OnScoreChangeListener, MineSweeperView.OnGameEndListener {
     private lateinit var mineSweeperView: MineSweeperView
@@ -15,6 +20,7 @@ class GameActivity : AppCompatActivity(), MineSweeperView.OnScoreChangeListener,
     private lateinit var scoreTextView: TextView
     private lateinit var timerTextView: TextView
     private lateinit var highScoreTextView: TextView
+    private lateinit var adView : BannerAdView
 
     private var elapsedTime = 0
     private var isTimerRunning = false
@@ -44,6 +50,29 @@ class GameActivity : AppCompatActivity(), MineSweeperView.OnScoreChangeListener,
         scoreTextView = findViewById(R.id.tvScore)
         scoreTextView.text = getString(R.string.score, 0)
         timerTextView = findViewById(R.id.tvTimer)
+
+
+
+        // ADS start
+
+        MobileAds.initialize(this) {
+            Log.d("MyLog", "Yandex Ads SDK initialized")
+        }
+
+        adView = findViewById(R.id.banner188)
+
+        adView.setAdUnitId("demo-banner-yandex")
+        adView.setAdSize(AdSize.stickySize(350))
+
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest)
+
+
+
+        // ADS end
+
+
+
 
         swipeRefreshLayout.setOnRefreshListener {
             resetGame()
