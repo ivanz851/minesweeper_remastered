@@ -6,11 +6,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.yandex.mobile.ads.banner.AdSize
+import com.yandex.mobile.ads.banner.BannerAdSize
 import com.yandex.mobile.ads.banner.BannerAdView
 import com.yandex.mobile.ads.common.AdRequest
 import com.yandex.mobile.ads.common.MobileAds
@@ -63,7 +62,7 @@ class GameActivity : AppCompatActivity(), MineSweeperView.OnScoreChangeListener,
         adView = findViewById(R.id.banner188)
 
         adView.setAdUnitId("demo-banner-yandex")
-        adView.setAdSize(AdSize.stickySize(350))
+        adView.setAdSize(BannerAdSize.stickySize(this, 350))
 
         val adRequest = AdRequest.Builder().build()
         adView.loadAd(adRequest)
