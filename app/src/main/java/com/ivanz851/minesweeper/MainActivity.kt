@@ -24,11 +24,6 @@ import com.ivanz851.minesweeper.Models.User
 import com.ivanz851.minesweeper.databinding.ActivityMainBinding
 import com.rengwuxian.materialedittext.MaterialEditText
 import android.content.ContentValues.TAG
-import com.yandex.mobile.ads.banner.AdSize
-import com.yandex.mobile.ads.banner.BannerAdEventListener
-import com.yandex.mobile.ads.common.AdRequest
-import com.yandex.mobile.ads.common.MobileAds
-import com.yandex.mobile.ads.banner.BannerAdView
 
 class MainActivity : AppCompatActivity() {
     private lateinit var btnSignIn: Button
