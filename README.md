@@ -1,2 +1,6 @@
 # minesweeper-for-android
-"# minesweeper_remastered" 
+
+
+Приложение в RuStore:
+
+Приложение в Google Play:
