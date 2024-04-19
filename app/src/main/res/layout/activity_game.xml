@@ -44,7 +44,7 @@
                     android:id="@+id/tvHighScore"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:text="@string/high_score"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -63,6 +63,20 @@
                     android:layout_margin="8dp"
                     android:fontFamily="@font/suez_one"
                     android:textColor="@color/black"/>
+
+
+                <TextView
+                    android:id="@+id/tvHints"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/hints"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_margin="8dp"
+                    android:fontFamily="@font/suez_one"
+                    android:textColor="@color/black"/>
+
             </LinearLayout>
 
         </LinearLayout>
@@ -93,7 +107,8 @@
                 android:layout_margin="20dp"
                 android:layout_weight="1"
                 android:id="@+id/settings_btn"
-                android:src="@drawable/settings_icon"/>
+                android:src="@drawable/settings_icon"
+                android:onClick="onClick"/>
 
             <Button
                 android:id="@+id/btn_to_main_menu"
@@ -115,7 +130,9 @@
                 android:layout_margin="20dp"
                 android:layout_weight="1"
                 android:id="@+id/hint_btn"
-                android:src="@drawable/hint_icon" />
+                android:src="@drawable/hint_icon"
+                android:onClick="onClick"
+                />
         </LinearLayout>
 
 

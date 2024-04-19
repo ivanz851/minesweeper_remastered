@@ -5,6 +5,7 @@
     <string name="score_default">Score: %d</string>
     <string name="high_score_text">High Score: %1$d</string>
     <string name="time">Time: %d</string>
+    <string name="hints">Hints: %d</string>
     <string name="main_btn_start">Start</string>
     <string name="main_btn_about">About</string>
     <string name="main_btn_exit">Exit</string>
