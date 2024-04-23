@@ -139,7 +139,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:gravity="center"> <!-- Центрирование элементов по горизонтали -->
+        android:gravity="center">
 
         <ImageView
             android:background="#80077a05"

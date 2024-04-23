@@ -175,12 +175,6 @@ class MainActivity : AppCompatActivity() {
             auth.signInWithEmailAndPassword(email.text.toString(), password.text.toString())
                 .addOnSuccessListener {
                     Snackbar.make(root, "SIGN IN SUCCESSFUL", Snackbar.LENGTH_LONG).show()
-
-                    /*
-                    val intent = Intent(this, MapActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                     */
                 }
                 .addOnFailureListener { e ->
                     Snackbar.make(root, "Auth error! ${e.message}", Snackbar.LENGTH_LONG).show()

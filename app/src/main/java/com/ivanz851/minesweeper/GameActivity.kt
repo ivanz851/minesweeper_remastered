@@ -53,14 +53,10 @@ class GameActivity : AppCompatActivity(), MineSweeperView.OnScoreChangeListener,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
-        // Yandex rewarded ads start
-        // Rewarded ads loading should occur after initialization of the SDK.
-        // Initialize SDK as early as possible, for example in Application.onCreate or Activity.onCreate
         rewardedAdLoader = RewardedAdLoader(this).apply {
             setAdLoadListener(object : RewardedAdLoadListener {
                 override fun onAdLoaded(rewarded: RewardedAd) {
                     rewardedAd = rewarded
-                    // The ad was loaded successfully. Now you can show loaded ad.
                 }
 
                 override fun onAdFailedToLoad(error: AdRequestError) {
@@ -70,7 +66,6 @@ class GameActivity : AppCompatActivity(), MineSweeperView.OnScoreChangeListener,
             })
         }
         loadRewardedAd()
-        //Yandex rewarded ads end
 
 
 
@@ -90,7 +85,7 @@ class GameActivity : AppCompatActivity(), MineSweeperView.OnScoreChangeListener,
 
 
 
-        // ADS start
+
 
         MobileAds.initialize(this) {
             Log.d("MyLog", "Yandex Ads SDK initialized")
@@ -106,7 +101,7 @@ class GameActivity : AppCompatActivity(), MineSweeperView.OnScoreChangeListener,
 
 
 
-        // ADS end
+
 
 
 
