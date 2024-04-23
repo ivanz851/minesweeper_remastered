@@ -1,5 +1,6 @@
 package com.ivanz851.minesweeper
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
@@ -23,7 +24,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.ivanz851.minesweeper.Models.User
 import com.ivanz851.minesweeper.databinding.ActivityMainBinding
 import com.rengwuxian.materialedittext.MaterialEditText
-import android.content.ContentValues.TAG
 
 class MainActivity : AppCompatActivity() {
     private lateinit var btnSignIn: Button
@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         db = FirebaseDatabase.getInstance()
         users = db.getReference("Users")
+        root = binding.root
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("1024959107236-1h421a50djv6doa8o0j9ua901grhmp04.apps.googleusercontent.com")
