@@ -19,16 +19,27 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.ivanz851.minesweeper.Models.User
 import com.ivanz851.minesweeper.databinding.ActivityMainBinding
 import com.rengwuxian.materialedittext.MaterialEditText
+import com.vk.api.sdk.auth.VKAccessToken
+import com.vk.api.sdk.auth.VKAuthCallback
+import com.vk.api.sdk.exceptions.VKAuthException
+import com.vk.sdk.VKCallback
 import com.vk.sdk.VKSdk
+import com.vk.sdk.api.VKError
 import com.vk.sdk.util.VKUtil
+
+//import com.vk.api.sdk.VK.onActivityResult
+
 
 class MainActivity : AppCompatActivity() {
     private val TAG: String = MainActivity::class.java.simpleName
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var firestore : FirebaseFirestore
+
     private lateinit var db: FirebaseDatabase
     private lateinit var users: DatabaseReference
 
@@ -54,6 +65,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupViews() {
         auth = FirebaseAuth.getInstance()
+        firestore = FirebaseFirestore.getInstance()
         db = FirebaseDatabase.getInstance()
         users = db.getReference("Users")
 
@@ -107,6 +119,56 @@ class MainActivity : AppCompatActivity() {
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
+        val callback = object : VKAuthCallback, VKCallback<com.vk.sdk.VKAccessToken> {
+            override fun onLogin(token: VKAccessToken) {
+                // Получаем идентификатор пользователя VK
+                val userId = token.userId
+
+                // Создаем или обновляем данные пользователя в Firebase
+                auth.signInAnonymously().addOnCompleteListener { authResult ->
+                    if (authResult.isSuccessful) {
+                        // Получаем анонимный идентификатор пользователя Firebase
+                        val firebaseUserId = auth.currentUser?.uid
+
+                        // Сохраняем идентификатор пользователя VK в базе данных Firebase
+                        firestore.collection("users").document(firebaseUserId!!)
+                            .set(mapOf(
+                                "name" to "Hello", // Добавьте соответствующие поля пользователя
+                                "email" to "Hello",
+                                "password" to "Hello",
+                                "phone" to "Hellno",
+                                "vkUserId" to userId // Сохраняем идентификатор пользователя VK
+                            ))
+                            .addOnSuccessListener {
+                                // Идентификатор пользователя VK успешно сохранен
+                            }
+                            .addOnFailureListener { exception ->
+                                // Ошибка сохранения идентификатора пользователя VK
+                            }
+                    } else {
+                        // Ошибка аутентификации Firebase
+                    }
+                }
+            }
+
+            override fun onLoginFailed(error: VKAuthException) {
+                // Обработка ошибки аутентификации VK
+            }
+
+            override fun onResult(res: com.vk.sdk.VKAccessToken?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onError(error: VKError?) {
+                TODO("Not yet implemented")
+            }
+        }
+        // Передаем callback в VK.onActivityResult
+        if (data == null || !VKSdk.onActivityResult(requestCode, resultCode, data, callback)) {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {

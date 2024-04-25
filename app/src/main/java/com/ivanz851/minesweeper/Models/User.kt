@@ -7,7 +7,10 @@ class User {
     private lateinit var phone: String
     
     private var bestScore: Int = 0
-    
+
+
+    private var vkUserId: String = ""
+
 
     constructor() {
         // Empty constructor
