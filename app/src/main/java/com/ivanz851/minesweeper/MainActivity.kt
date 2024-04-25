@@ -125,30 +125,16 @@ class MainActivity : AppCompatActivity() {
                 // Получаем идентификатор пользователя VK
                 val userId = token.userId
 
-                // Создаем или обновляем данные пользователя в Firebase
-                auth.signInAnonymously().addOnCompleteListener { authResult ->
-                    if (authResult.isSuccessful) {
-                        // Получаем анонимный идентификатор пользователя Firebase
-                        val firebaseUserId = auth.currentUser?.uid
 
-                        // Сохраняем идентификатор пользователя VK в базе данных Firebase
-                        firestore.collection("users").document(firebaseUserId!!)
-                            .set(mapOf(
-                                "name" to "Hello", // Добавьте соответствующие поля пользователя
-                                "email" to "Hello",
-                                "password" to "Hello",
-                                "phone" to "Hellno",
-                                "vkUserId" to userId // Сохраняем идентификатор пользователя VK
-                            ))
-                            .addOnSuccessListener {
-                                // Идентификатор пользователя VK успешно сохранен
-                            }
-                            .addOnFailureListener { exception ->
-                                // Ошибка сохранения идентификатора пользователя VK
-                            }
-                    } else {
-                        // Ошибка аутентификации Firebase
-                    }
+                val emailVk : String = "hahaha"
+                auth.signInWithEmailAndPassword(emailVk, emailVk)
+                    .addOnCompleteListener { authResult ->
+                        if (authResult.isSuccessful) {
+                            Snackbar.make(root, "SIGN IN SUCCESSFUL", Snackbar.LENGTH_LONG).show()
+                        } else {
+                            // Ошибка аутентификации Firebase
+                        }
+
                 }
             }
 
