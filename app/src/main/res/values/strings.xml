@@ -25,4 +25,8 @@
     <string name="password">Password</string>
     <string name="already_have_an_account">Already have an account?</string>
 
+
+    <!-- Vk button -->
+    <integer name="com_vk_sdk_AppId"> 51912479 </integer>
+
 </resources>

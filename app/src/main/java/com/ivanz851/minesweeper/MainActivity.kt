@@ -7,7 +7,6 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -21,15 +20,26 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.ivanz851.minesweeper.Models.User
 import com.ivanz851.minesweeper.databinding.ActivityMainBinding
 import com.rengwuxian.materialedittext.MaterialEditText
+import com.vk.api.sdk.auth.VKAccessToken
+import com.vk.api.sdk.auth.VKAuthCallback
+import com.vk.api.sdk.exceptions.VKAuthException
+import com.vk.sdk.VKCallback
+import com.vk.sdk.VKSdk
+import com.vk.sdk.api.VKError
+import com.vk.sdk.util.VKUtil
+
+//import com.vk.api.sdk.VK.onActivityResult
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var btnSignIn: Button
-    private lateinit var btnSignUp: Button
+    private val TAG: String = MainActivity::class.java.simpleName
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var firestore : FirebaseFirestore
+
     private lateinit var db: FirebaseDatabase
     private lateinit var users: DatabaseReference
 
@@ -42,6 +52,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setupBinding()
         setupViews()
+
+        val fingerprints = VKUtil.getCertificateFingerprint(this, this.packageName)
+        Log.e(TAG, "fingerprint ${fingerprints[0]}")
+        // F2F904290ABD1926526749D8F2033BB80601DF1C
     }
 
     private fun setupBinding() {
@@ -51,6 +65,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupViews() {
         auth = FirebaseAuth.getInstance()
+        firestore = FirebaseFirestore.getInstance()
         db = FirebaseDatabase.getInstance()
         users = db.getReference("Users")
         root = binding.root
@@ -61,6 +76,12 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+
+        binding.vkBtn.setOnClickListener {
+            VKSdk.login(this@MainActivity)
+        }
+
 
         binding.btnSignInGoogle.setOnClickListener {
             signIn()
@@ -99,6 +120,42 @@ class MainActivity : AppCompatActivity() {
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
+        val callback = object : VKAuthCallback, VKCallback<com.vk.sdk.VKAccessToken> {
+            override fun onLogin(token: VKAccessToken) {
+                // Получаем идентификатор пользователя VK
+                val userId = token.userId
+
+
+                val emailVk : String = "hahaha"
+                auth.signInWithEmailAndPassword(emailVk, emailVk)
+                    .addOnCompleteListener { authResult ->
+                        if (authResult.isSuccessful) {
+                            Snackbar.make(root, "SIGN IN SUCCESSFUL", Snackbar.LENGTH_LONG).show()
+                        } else {
+                            // Ошибка аутентификации Firebase
+                        }
+
+                }
+            }
+
+            override fun onLoginFailed(error: VKAuthException) {
+                // Обработка ошибки аутентификации VK
+            }
+
+            override fun onResult(res: com.vk.sdk.VKAccessToken?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onError(error: VKError?) {
+                TODO("Not yet implemented")
+            }
+        }
+        // Передаем callback в VK.onActivityResult
+        if (data == null || !VKSdk.onActivityResult(requestCode, resultCode, data, callback)) {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
