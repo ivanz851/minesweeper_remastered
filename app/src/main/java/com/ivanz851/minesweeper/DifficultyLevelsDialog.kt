@@ -1,9 +1,10 @@
+package com.ivanz851.minesweeper
+
 import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.RadioGroup
-import com.ivanz851.minesweeper.R
 
 class DifficultyDialog(private val context: Context) {
 

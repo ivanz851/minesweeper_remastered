@@ -1,6 +1,5 @@
 package com.ivanz851.minesweeper
 
-import DifficultyDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
