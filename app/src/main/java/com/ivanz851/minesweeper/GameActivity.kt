@@ -1,5 +1,6 @@
 package com.ivanz851.minesweeper
 
+import DifficultyDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -247,8 +248,25 @@ class GameActivity : AppCompatActivity(), MineSweeperView.OnScoreChangeListener,
                 showAd()
             }
             R.id.settings_btn -> {
-                // TODO реализовать выбор уровня сложности
+                val difficultyDialog = DifficultyDialog(this)
+                difficultyDialog.show { selectedDifficulty ->
+                    when (selectedDifficulty) {
+                        0 -> mineSweeperView.setBoardSize(5, 5)
+                        1 -> mineSweeperView.setBoardSize(6, 6)
+                        2 -> mineSweeperView.setBoardSize(4, 8)
+                        3 -> mineSweeperView.setBoardSize(6, 11)
+                        4 -> mineSweeperView.setBoardSize(12, 22)
+                        else -> mineSweeperView.setBoardSize(5, 5)
+                    }
+                    resetGame()
+                }
             }
         }
+
+    }
+    private fun restartActivity() {
+        val intent = intent
+        finish()
+        startActivity(intent)
     }
 }

@@ -2,7 +2,12 @@ package com.ivanz851.minesweeper
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
@@ -14,8 +19,8 @@ import kotlin.random.Random
 
 class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
-    private var boardWidth = 12
-    private var boardHeight = 22
+    private var boardWidth = 6
+    private var boardHeight = 11
     private var mineCount = (boardWidth * boardHeight * 0.10).toInt()
     private var cellSize = 100
 
@@ -57,7 +62,7 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
     init {
         isFocusable = true
         isFocusableInTouchMode = true
-        generateBoard() // Initialize the cells property
+        generateBoard(boardWidth, boardHeight) // Initialize the cells property
     }
 
     private val gestureDetector = GestureDetector(context, object : SimpleOnGestureListener() {
@@ -250,7 +255,7 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
         }
     }
 
-    private fun generateBoard() {
+    private fun generateBoard(boardWidth: Int, boardHeight: Int) {
         cells = Array(boardWidth) { x ->
             Array(boardHeight) { y ->
                 Cell(x, y, isMine = false, isRevealed = false, mineCount = 0)
@@ -276,7 +281,7 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
     }
 
     fun resetGame() {
-        generateBoard()
+        generateBoard(boardWidth, boardHeight)
         score = 0
         scoreChangeListener?.onScoreChanged(score)
     }
@@ -319,5 +324,10 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
 
     fun getCurrentScore(): Int {
         return score
+    }
+
+    fun setBoardSize(width: Int, height: Int) {
+        boardWidth = width
+        boardHeight = height
     }
 }
