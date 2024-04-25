@@ -21,7 +21,7 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
 
     private var boardWidth = 6
     private var boardHeight = 11
-    private var mineCount = (boardWidth * boardHeight * 0.10).toInt()
+    private var mineCount = (boardWidth * boardHeight * 0.12).toInt()
     private var cellSize = 100
 
     private var boardPixelWidth = 0
@@ -329,5 +329,6 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
     fun setBoardSize(width: Int, height: Int) {
         boardWidth = width
         boardHeight = height
+        mineCount = (boardWidth * boardHeight * 0.12).toInt()
     }
 }
