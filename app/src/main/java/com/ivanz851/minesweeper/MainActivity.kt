@@ -6,7 +6,6 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -23,11 +22,11 @@ import com.google.firebase.database.FirebaseDatabase
 import com.ivanz851.minesweeper.Models.User
 import com.ivanz851.minesweeper.databinding.ActivityMainBinding
 import com.rengwuxian.materialedittext.MaterialEditText
-import android.content.ContentValues.TAG
+import com.vk.sdk.VKSdk
+import com.vk.sdk.util.VKUtil
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var btnSignIn: Button
-    private lateinit var btnSignUp: Button
+    private val TAG: String = MainActivity::class.java.simpleName
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseDatabase
@@ -42,6 +41,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setupBinding()
         setupViews()
+
+        val fingerprints = VKUtil.getCertificateFingerprint(this, this.packageName)
+        Log.e(TAG, "fingerprint ${fingerprints[0]}")
+        // F2F904290ABD1926526749D8F2033BB80601DF1C
     }
 
     private fun setupBinding() {
@@ -60,6 +63,12 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+
+        binding.vkBtn.setOnClickListener {
+            VKSdk.login(this@MainActivity)
+        }
+
 
         binding.btnSignInGoogle.setOnClickListener {
             signIn()
