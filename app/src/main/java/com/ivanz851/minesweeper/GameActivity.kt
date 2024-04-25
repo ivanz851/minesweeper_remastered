@@ -250,22 +250,44 @@ class GameActivity : AppCompatActivity(), MineSweeperView.OnScoreChangeListener,
             R.id.settings_btn -> {
                 val difficultyDialog = DifficultyDialog(this)
                 difficultyDialog.show { selectedDifficulty ->
+                    var newWidth: Int = 5
+                    var newHeight: Int = 5
                     when (selectedDifficulty) {
-                        0 -> mineSweeperView.setBoardSize(5, 5)
-                        1 -> mineSweeperView.setBoardSize(6, 6)
-                        2 -> mineSweeperView.setBoardSize(4, 8)
-                        3 -> mineSweeperView.setBoardSize(6, 11)
-                        4 -> mineSweeperView.setBoardSize(12, 22)
-                        else -> mineSweeperView.setBoardSize(5, 5)
+                        0 -> {
+                            newWidth = 5
+                            newHeight = 5
+                        }
+                        1 -> {
+                            newWidth = 6
+                            newHeight = 6
+                        }
+                        2 -> {
+                            newWidth = 4
+                            newHeight = 8
+                        }
+                        3 -> {
+                            newWidth = 6
+                            newHeight = 11
+                        }
+                        4 -> {
+                            newWidth = 12
+                            newHeight = 22
+                        }
                     }
+                    mineSweeperView.setBoardSize(newWidth, newHeight)
+                    mineSweeperView.onSizeChanged(newWidth, newHeight, mineSweeperView.width, mineSweeperView.height)
+
                     resetGame()
                 }
             }
+
         }
 
     }
-    private fun restartActivity() {
-        val intent = intent
+    private fun restartActivity(selectedDifficulty: Int) {
+        val intent = intent.apply {
+            putExtra("difficulty", selectedDifficulty)
+        }
         finish()
         startActivity(intent)
     }

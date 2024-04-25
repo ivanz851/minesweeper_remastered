@@ -94,7 +94,7 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
         }
     })
 
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+    public override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
 
         val screenWidth = width
