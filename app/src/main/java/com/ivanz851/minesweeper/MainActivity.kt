@@ -1,6 +1,5 @@
 package com.ivanz851.minesweeper
 
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
@@ -194,6 +193,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(applicationContext, GoogleSignInActivity::class.java)
             intent.putExtra(EXTRA_NAME, user.displayName)
             startActivity(intent)
+            finish()
         }
     }
 
