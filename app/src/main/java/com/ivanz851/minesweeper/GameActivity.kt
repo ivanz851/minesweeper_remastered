@@ -74,6 +74,7 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
             setAdLoadListener(object : RewardedAdLoadListener {
                 override fun onAdLoaded(rewarded: RewardedAd) {
                     rewardedAd = rewarded
+                    loadStuff()
                 }
 
                 override fun onAdFailedToLoad(error: AdRequestError) {
@@ -82,7 +83,9 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
             })
         }
         loadRewardedAd()
+    }
 
+    private fun loadStuff() {
         highScoreTextView = findViewById(R.id.tvHighScore)
 
         val sharedPrefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
@@ -114,17 +117,7 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
         timerTextView = findViewById(R.id.tvTimer)
         hintsTextView.text = getString(R.string.hints, 0)
 
-        MobileAds.initialize(this) {
-        }
-
-        adView = findViewById(R.id.banner188)
-
-        adView.setAdUnitId("demo-banner-yandex")
-        adView.setAdSize(BannerAdSize.stickySize(this, 350))
-
-        val adRequest = AdRequest.Builder().build()
-        adView.loadAd(adRequest)
-
+        loadAdBanner()
 
         mineSweeperView.setOnHintsCountChangeListener(this)
         changeHintsCount(0)
@@ -142,6 +135,19 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
         }
 
         mineSweeperView.setOnGameEndListener(this)
+    }
+
+    private fun loadAdBanner() {
+        MobileAds.initialize(this) {
+        }
+
+        adView = findViewById(R.id.banner188)
+
+        adView.setAdUnitId("demo-banner-yandex")
+        adView.setAdSize(BannerAdSize.stickySize(this, 350))
+
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest)
     }
 
     private fun loadRewardedAd() {

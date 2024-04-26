@@ -24,6 +24,27 @@
     <string name="email_address">Email Address</string>
     <string name="password">Password</string>
     <string name="already_have_an_account">Already have an account?</string>
+    <string name="game_rules_text">
+        Minesweeper is a puzzle game that features a grid of clickable cells with hidden mines
+        scattered across the playing field. The goal of the game is to place all the cells with
+        mines and open all the cells that do not contain mines. The player gradually opens
+        the cells (or marks them mined) using hints about the number of adjacent mines shown in
+        the opened cells.
+        \n\n
+        Click on the gear button to select the difficulty level.
+        \n\n
+        Click the button with the light bulb to watch ads and get the opportunity to
+        use the hint in the passage.
+        \n\n
+        To enable the safe mode of opening the cells, switch the toggle switch above the
+        advertising banner (first make sure you have enough hints).
+        \n\n
+        To start a new game, just swipe down the screen.
+    </string>
+    <string name="back_to_main_menu_button_text">Main menu</string>
+    <string name="hint_switch_text">Use hint</string>
+    <string name="about_button_text">About</string>
+    <string name="exit_button_text">Exit</string>
 
 
     <!-- Vk button -->

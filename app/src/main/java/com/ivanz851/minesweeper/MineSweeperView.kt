@@ -42,6 +42,8 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
     private var hintSwitch: SwitchCompat? = null
     private var hintsCount: Int = 0
 
+    private var firstTurn: Boolean = true
+
 
     private val paintLine = Paint().apply {
         color = Color.BLACK
@@ -80,8 +82,15 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
             val y = ((e.y - verticalOffset) / cellSize).toInt()
 
             if (x in 0 until boardWidth && y in 0 until boardHeight) {
+                if (firstTurn) {
+                    while (cells[x][y].isMine) {
+                        generateBoard(boardWidth, boardHeight)
+                    }
+                    firstTurn = false
+                }
+
                 val cell = cells[x][y]
-                if (!cell.isRevealed && !cell.isFlagged) {
+                if (!cell.isRevealed && !cells[x][y].isFlagged) {
                     revealCell(x, y)
                     checkWinCondition()
                 }
@@ -276,6 +285,7 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
 
 
     private fun generateBoard(boardWidth: Int, boardHeight: Int) {
+        firstTurn = true
         cells = Array(boardWidth) { x ->
             Array(boardHeight) { y ->
                 Cell(x, y, isMine = false, isRevealed = false, mineCount = 0)
@@ -304,6 +314,7 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
     fun resetGame() {
         generateBoard(boardWidth, boardHeight)
         score = 0
+        firstTurn = true
         scoreChangeListener?.onScoreChanged(score)
     }
 
@@ -357,7 +368,6 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
     fun setHintSwitch(hintSwitch: SwitchCompat) {
         this.hintSwitch = hintSwitch
     }
-
 
     private var gameEndListener: OnGameEndListener? = null
 }

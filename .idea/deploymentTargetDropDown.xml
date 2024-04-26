@@ -2,6 +2,12 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="MainActivityTest">
+        <State />
+      </entry>
+      <entry key="isPhoneNumberValid()">
+        <State />
+      </entry>
       <entry key="mnswpr">
         <State />
       </entry>

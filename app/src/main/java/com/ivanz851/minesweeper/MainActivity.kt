@@ -3,7 +3,6 @@ package com.ivanz851.minesweeper
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -21,14 +20,14 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.ivanz851.minesweeper.models.User
 import com.ivanz851.minesweeper.databinding.ActivityMainBinding
+import com.ivanz851.minesweeper.models.User
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.vk.sdk.VKAccessToken
 import com.vk.sdk.VKCallback
-import com.vk.sdk.VKScope
 import com.vk.sdk.VKSdk
 import com.vk.sdk.api.VKError
+import java.util.regex.Pattern
 
 
 class MainActivity : AppCompatActivity() {
@@ -152,15 +151,9 @@ class MainActivity : AppCompatActivity() {
 
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
             .addOnSuccessListener {
-                Log.d(tag, "FLAG - 2")
                 Snackbar.make(binding.root, "SIGN IN SUCCESSFUL", Snackbar.LENGTH_LONG).show()
             }
             .addOnFailureListener {
-                Log.d(tag, "FLAG - 3")
-
-                Log.d(tag, email)
-                Log.d(tag, password)
-
                 FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                     .addOnSuccessListener {
                         val user = User()
@@ -176,7 +169,6 @@ class MainActivity : AppCompatActivity() {
                                 .setValue(user)
                         }
                     }.addOnFailureListener {
-                        Log.d(tag, "FLAG - 4")
                     }
             }
     }
@@ -190,7 +182,6 @@ class MainActivity : AppCompatActivity() {
                     Snackbar.make(binding.root, "SIGN IN SUCCESSFUL", Snackbar.LENGTH_LONG).show()
 
                     val user = FirebaseAuth.getInstance().currentUser
-                    //updateUI(user)
 
                     user?.let {
                         val name = user.displayName
@@ -216,21 +207,9 @@ class MainActivity : AppCompatActivity() {
                         })
                     }
                 } else {
-                    // updateUI(null)
                 }
             }
     }
-
-    /*
-    private fun updateUI(user: FirebaseUser?) {
-        if (user != null) {
-            val intent = Intent(applicationContext, GoogleSignInActivity::class.java)
-            intent.putExtra(EXTRA_NAME, user.displayName)
-            startActivity(intent)
-            finish()
-        }
-    }
-     */
 
     companion object {
         const val GOOGLE_RC_SIGN_IN = 1001
@@ -308,8 +287,19 @@ class MainActivity : AppCompatActivity() {
                 Snackbar.make(binding.root, "Enter your phone", Snackbar.LENGTH_LONG).show()
                 return@setPositiveButton
             }
-            if (password.text.toString().length < 8) {
-                Snackbar.make(binding.root, "Enter password longer than 8 symbols", Snackbar.LENGTH_LONG)
+
+            if (!isEmailValid(email.text.toString())) {
+                Snackbar.make(binding.root, "Enter correct e-mail", Snackbar.LENGTH_LONG)
+                    .show()
+                return@setPositiveButton
+            }
+            if (!isPhoneNumberValid(phone.text.toString())) {
+                Snackbar.make(binding.root, "Enter correct phone number", Snackbar.LENGTH_LONG)
+                    .show()
+                return@setPositiveButton
+            }
+            if (!isPasswordValid(password.text.toString())) {
+                Snackbar.make(binding.root, "Enter reliable password", Snackbar.LENGTH_LONG)
                     .show()
                 return@setPositiveButton
             }
@@ -321,7 +311,6 @@ class MainActivity : AppCompatActivity() {
                     user.setName(name.text.toString())
                     user.setPassword(password.text.toString())
                     user.setPhone(phone.text.toString())
-
 
                     Snackbar.make(binding.root, "User successfully added!", Snackbar.LENGTH_LONG).show()
 
@@ -344,5 +333,27 @@ class MainActivity : AppCompatActivity() {
 
         }
         dialog.show()
+    }
+
+
+    fun isEmailValid(emailAddress : String) : Boolean {
+        val pattern : Pattern = Pattern.compile(
+            ("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+                    + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$"))
+        return pattern.matcher(emailAddress).matches()
+    }
+
+    fun isPhoneNumberValid(phoneNumber : String): Boolean {
+        val pattern : Pattern = Pattern.compile((
+                "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"
+                        + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
+                        + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$"))
+        return pattern.matcher(phoneNumber).matches()
+    }
+
+    fun isPasswordValid(password : String) : Boolean {
+        val pattern : Pattern = Pattern.compile(
+            ("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,20}$"))
+        return pattern.matcher(password).matches()
     }
 }
