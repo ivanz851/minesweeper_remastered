@@ -239,8 +239,15 @@ class MainActivity : AppCompatActivity() {
                 return@setPositiveButton
             }
 
-            if (password.text.toString().length < 8) {
-                Snackbar.make(binding.root, "Enter password longer than 8 symbols", Snackbar.LENGTH_LONG).show()
+
+            if (!isEmailValid(email.text.toString())) {
+                Snackbar.make(binding.root, "Enter correct e-mail", Snackbar.LENGTH_LONG)
+                    .show()
+                return@setPositiveButton
+            }
+            if (!isPasswordValid(password.text.toString())) {
+                Snackbar.make(binding.root, "Enter correct password", Snackbar.LENGTH_LONG)
+                    .show()
                 return@setPositiveButton
             }
 
