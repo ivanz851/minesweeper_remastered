@@ -82,7 +82,7 @@ class GameActivity : AppCompatActivity(), MineSweeperView.OnScoreChangeListener,
         hintsTextView = findViewById(R.id.tvHints)
         scoreTextView.text = getString(R.string.score, 0)
         timerTextView = findViewById(R.id.tvTimer)
-
+        hintsTextView.text = getString(R.string.hints, 0)
 
 
 
@@ -257,12 +257,12 @@ class GameActivity : AppCompatActivity(), MineSweeperView.OnScoreChangeListener,
                             newHeight = 5
                         }
                         1 -> {
-                            newWidth = 6
-                            newHeight = 6
-                        }
-                        2 -> {
                             newWidth = 4
                             newHeight = 8
+                        }
+                        2 -> {
+                            newWidth = 6
+                            newHeight = 6
                         }
                         3 -> {
                             newWidth = 6

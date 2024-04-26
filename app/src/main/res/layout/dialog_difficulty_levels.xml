@@ -22,31 +22,31 @@
             android:id="@+id/radioNewbie"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Newbie (5x5 field, 6 mines)" />
+            android:text="Newbie (5x5 field, 3 mines)" />
 
         <RadioButton
             android:id="@+id/radioEasy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Easy (6x6 field, 6 mines)" />
+            android:text="Easy (4x8 field, 3 mines)" />
 
         <RadioButton
             android:id="@+id/radioMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Medium (4x8 field, 6 mines)" />
+            android:text="Medium (6x6 field, 4 mines)" />
 
         <RadioButton
             android:id="@+id/radioHard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hard (6x11 field, 6 mines)" />
+            android:text="Hard (6x11 field, 7 mines)" />
 
         <RadioButton
             android:id="@+id/radioInsane"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Insane (12x22 field, 6 mines)" />
+            android:text="Insane (12x22 field, 31 mines)" />
 
     </RadioGroup>
 
