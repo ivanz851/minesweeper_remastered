@@ -110,18 +110,34 @@
                 android:src="@drawable/settings_icon"
                 android:onClick="onClick"/>
 
-            <Button
-                android:id="@+id/btn_to_main_menu"
+
+            <LinearLayout
+                android:id="@+id/backButtonAndHintSwitchLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/btn_standard_color"
-                android:fontFamily="@font/suez_one"
-                android:onClick="onClick"
-                android:text="Back to main menu"
-                android:textColor="@android:color/white"
-                android:textSize="15sp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="2"/>
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:layout_weight="2">
+                <Button
+                    android:id="@+id/btn_to_main_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:backgroundTint="@color/btn_standard_color"
+                    android:fontFamily="@font/suez_one"
+                    android:onClick="onClick"
+                    android:text="Main menu"
+                    android:textColor="@android:color/white"
+                    android:textSize="15sp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="5"/>
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/hintSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Use hint"
+                    android:layout_weight="1"/>
+            </LinearLayout>
 
             <ImageView
                 android:background="@color/white"

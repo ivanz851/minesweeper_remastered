@@ -8,7 +8,11 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.ivanz851.minesweeper.Listeners.OnGameEndListener
+import com.ivanz851.minesweeper.Listeners.OnHintsCountChangeListener
+import com.ivanz851.minesweeper.Listeners.OnScoreChangeListener
 import com.yandex.mobile.ads.banner.BannerAdSize
 import com.yandex.mobile.ads.banner.BannerAdView
 import com.yandex.mobile.ads.common.AdError
@@ -23,7 +27,7 @@ import com.yandex.mobile.ads.rewarded.RewardedAdEventListener
 import com.yandex.mobile.ads.rewarded.RewardedAdLoadListener
 import com.yandex.mobile.ads.rewarded.RewardedAdLoader
 
-class GameActivity : AppCompatActivity(), MineSweeperView.OnScoreChangeListener, MineSweeperView.OnGameEndListener {
+class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreChangeListener, OnGameEndListener {
     private lateinit var mineSweeperView: MineSweeperView
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var scoreTextView: TextView
@@ -31,15 +35,17 @@ class GameActivity : AppCompatActivity(), MineSweeperView.OnScoreChangeListener,
     private lateinit var highScoreTextView: TextView
     private lateinit var hintsTextView : TextView
     private lateinit var adView : BannerAdView
+    private lateinit var hintSwitch : SwitchCompat
 
     private var elapsedTime = 0
     private var isTimerRunning = false
     private val timerHandler = Handler()
     private var highScore = 0
 
+    private var hintsCount = 0
+
     private var rewardedAd: RewardedAd? = null
     private var rewardedAdLoader: RewardedAdLoader? = null
-    private var hintsCount = 0
 
     private val timerRunnable = object : Runnable {
         override fun run() {
@@ -52,6 +58,8 @@ class GameActivity : AppCompatActivity(), MineSweeperView.OnScoreChangeListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+
+        hintSwitch = findViewById(R.id.hintSwitch)
 
         rewardedAdLoader = RewardedAdLoader(this).apply {
             setAdLoadListener(object : RewardedAdLoadListener {
@@ -77,6 +85,8 @@ class GameActivity : AppCompatActivity(), MineSweeperView.OnScoreChangeListener,
 
         highScoreTextView.text = String.format(getString(R.string.high_score_text), highScore)
         mineSweeperView = findViewById(R.id.mineSweeperView)
+        mineSweeperView.setHintSwitch(hintSwitch)
+
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
         scoreTextView = findViewById(R.id.tvScore)
         hintsTextView = findViewById(R.id.tvHints)
@@ -104,7 +114,8 @@ class GameActivity : AppCompatActivity(), MineSweeperView.OnScoreChangeListener,
 
 
 
-
+        mineSweeperView.setOnHintsCountChangeListener(this)
+        changeHintsCount(0)
 
         swipeRefreshLayout.setOnRefreshListener {
             resetGame()
@@ -120,6 +131,10 @@ class GameActivity : AppCompatActivity(), MineSweeperView.OnScoreChangeListener,
 
         mineSweeperView.setOnGameEndListener(this)
     }
+
+
+
+
 
     private fun loadRewardedAd() {
         val adRequestConfiguration = AdRequestConfiguration.Builder("demo-rewarded-yandex").build()
@@ -185,10 +200,9 @@ class GameActivity : AppCompatActivity(), MineSweeperView.OnScoreChangeListener,
     }
 
     private fun GetHintAdd() {
-        hintsCount++;
+        changeHintsCount(1);
         // TODO : binding с отображением числа монет (сначала надо переписать весь код выше при помощи binding)
          //binding.hintCountTextView.text="Hints:$hintsCount"
-        hintsTextView.text = getString(R.string.hints, hintsCount)
     }
 
 
@@ -215,9 +229,13 @@ class GameActivity : AppCompatActivity(), MineSweeperView.OnScoreChangeListener,
         }
     }
 
+
+    override fun onHintCountChanged(count: Int) {
+        changeHintsCount(-1)
+    }
+
     override fun onScoreChanged(score: Int) {
         scoreTextView.text = getString(R.string.score, score)
-
     }
 
     override fun onGameEnd() {
@@ -289,5 +307,16 @@ class GameActivity : AppCompatActivity(), MineSweeperView.OnScoreChangeListener,
         }
         finish()
         startActivity(intent)
+    }
+
+
+    private fun updateHintSwitchAvailability() {
+        hintSwitch.isEnabled = hintsCount > 0
+    }
+
+    private fun changeHintsCount(delta: Int) {
+        hintsCount += delta;
+        updateHintSwitchAvailability()
+        hintsTextView.text = getString(R.string.hints, hintsCount)
     }
 }
