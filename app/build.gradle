@@ -83,7 +83,4 @@ dependencies {
     implementation 'com.yandex.android:mobileads:7.0.0'
 
     implementation 'com.vk:androidsdk:1.6.9'
-
-    implementation 'com.vk:android-sdk-core:4.1.0'
-    implementation 'com.vk:android-sdk-api:4.1.0'
 }

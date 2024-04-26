@@ -3,6 +3,7 @@ package com.ivanz851.minesweeper
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -14,7 +15,6 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
@@ -24,13 +24,12 @@ import com.google.firebase.database.ValueEventListener
 import com.ivanz851.minesweeper.Models.User
 import com.ivanz851.minesweeper.databinding.ActivityMainBinding
 import com.rengwuxian.materialedittext.MaterialEditText
-import com.vk.api.sdk.auth.VKAccessToken
-import com.vk.api.sdk.auth.VKAuthCallback
-import com.vk.api.sdk.exceptions.VKAuthException
+import com.vk.sdk.VKAccessToken
 import com.vk.sdk.VKCallback
+import com.vk.sdk.VKScope
 import com.vk.sdk.VKSdk
 import com.vk.sdk.api.VKError
-import com.vk.sdk.util.VKUtil
+
 
 class MainActivity : AppCompatActivity() {
     private val tag: String = MainActivity::class.java.simpleName
@@ -42,8 +41,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setupBinding()
         setupViews()
-
-        val fingerprints = VKUtil.getCertificateFingerprint(this, this.packageName)
     }
 
     private fun setupBinding() {
@@ -61,7 +58,12 @@ class MainActivity : AppCompatActivity() {
 
         binding.vkBtn.setOnClickListener {
             signOutEverything()
-            VKSdk.login(this@MainActivity)
+
+            VKSdk.login(
+                this,
+                VKScope.FRIENDS.toString()
+            )
+
         }
 
         binding.btnSignInGoogle.setOnClickListener {
@@ -94,6 +96,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.mainBtnExit.setOnClickListener {
+            signOutEverything()
             finish()
         }
     }
@@ -110,48 +113,33 @@ class MainActivity : AppCompatActivity() {
         googleSignInClient.signOut()
 
         FirebaseAuth.getInstance().signOut()
+        VKSdk.logout()
     }
+
 
     private fun signInViaGoogle() {
         val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
+        startActivityForResult(signInIntent, GOOGLE_RC_SIGN_IN)
     }
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        val callback = object : VKAuthCallback, VKCallback<com.vk.sdk.VKAccessToken> {
-            override fun onLogin(token: VKAccessToken) {
-                val userId = token.userId
 
-                val emailVk : String = "hahaha"
-                FirebaseAuth.getInstance().signInWithEmailAndPassword(emailVk, emailVk)
-                    .addOnCompleteListener { authResult ->
-                        if (authResult.isSuccessful) {
-                            Snackbar.make(binding.root, "SIGN IN SUCCESSFUL", Snackbar.LENGTH_LONG).show()
-                        } else {
-                        }
-
+        if (!VKSdk.onActivityResult(requestCode, resultCode, data, object :
+                VKCallback<VKAccessToken> {
+                override fun onResult(res: VKAccessToken) {
+                    firebaseAuthWithVk(res.accessToken)
                 }
-            }
-
-            override fun onLoginFailed(authException: VKAuthException) {
-            }
-
-            override fun onResult(res: com.vk.sdk.VKAccessToken?) {
-
-            }
-
-            override fun onError(error: VKError?) {
-
-            }
-        }
-        if (data == null || !VKSdk.onActivityResult(requestCode, resultCode, data, callback)) {
+                override fun onError(error: VKError) {
+                }
+            })) {
             super.onActivityResult(requestCode, resultCode, data)
         }
 
-        if (requestCode == RC_SIGN_IN) {
+
+        if (requestCode == GOOGLE_RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)!!
@@ -161,13 +149,47 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    private fun firebaseAuthWithVk(idToken: String) {
+        Log.d(tag, "FLAG - 1")
+
+        FirebaseAuth.getInstance().signInWithEmailAndPassword("test414343@ya.ru", "12345678")
+            .addOnSuccessListener {
+                Log.d(tag, "FLAG - 2")
+                Snackbar.make(binding.root, "SIGN IN SUCCESSFUL", Snackbar.LENGTH_LONG).show()
+            }
+            .addOnFailureListener { e ->
+                Log.d(tag, "FLAG - 3")
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword("test414343@ya.ru", "12345678")
+                    .addOnSuccessListener {
+                        val user = User()
+                        user.setEmail("govno@vk.com")
+                        user.setName("FLAGFLAGFLAG")
+                        user.setPassword("12345678865")
+                        user.setPhone("88005553535")
+
+                        Snackbar.make(binding.root, "SIGN IN SUCCESSFUL", Snackbar.LENGTH_LONG).show()
+
+                        FirebaseAuth.getInstance().currentUser?.let {
+                            FirebaseDatabase.getInstance().getReference("Users").child(it.uid)
+                                .setValue(user)
+                        }
+                    }.addOnFailureListener {
+                        Log.d(tag, "FLAG - 4")
+                    }
+            }
+    }
+
+
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         FirebaseAuth.getInstance().signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
+                    Snackbar.make(binding.root, "SIGN IN SUCCESSFUL", Snackbar.LENGTH_LONG).show()
+
                     val user = FirebaseAuth.getInstance().currentUser
-                    updateUI(user)
+                    //updateUI(user)
 
                     user?.let {
                         val name = user.displayName
@@ -193,11 +215,12 @@ class MainActivity : AppCompatActivity() {
                         })
                     }
                 } else {
-                    updateUI(null)
+                    // updateUI(null)
                 }
             }
     }
 
+    /*
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
             val intent = Intent(applicationContext, GoogleSignInActivity::class.java)
@@ -206,9 +229,11 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
     }
+     */
 
     companion object {
-        const val RC_SIGN_IN = 1001
+        const val GOOGLE_RC_SIGN_IN = 1001
+        const val VK_RC_SIGN_IN = 1002
         const val EXTRA_NAME = "EXTRA_NAME"
     }
 
