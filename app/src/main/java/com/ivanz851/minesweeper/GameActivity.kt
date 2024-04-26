@@ -12,9 +12,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.ivanz851.minesweeper.Listeners.OnGameEndListener
-import com.ivanz851.minesweeper.Listeners.OnHintsCountChangeListener
-import com.ivanz851.minesweeper.Listeners.OnScoreChangeListener
+import com.ivanz851.minesweeper.listeners.OnGameEndListener
+import com.ivanz851.minesweeper.listeners.OnHintsCountChangeListener
+import com.ivanz851.minesweeper.listeners.OnScoreChangeListener
 import com.yandex.mobile.ads.banner.BannerAdSize
 import com.yandex.mobile.ads.banner.BannerAdView
 import com.yandex.mobile.ads.common.AdError

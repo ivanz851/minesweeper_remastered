@@ -1,4 +1,4 @@
-package com.ivanz851.minesweeper.Listeners
+package com.ivanz851.minesweeper.listeners
 
 interface OnScoreChangeListener {
     fun onScoreChanged(score: Int)

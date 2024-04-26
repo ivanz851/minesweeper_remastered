@@ -1,4 +1,4 @@
-package com.ivanz851.minesweeper.Models
+package com.ivanz851.minesweeper.models
 
 class User {
     private lateinit var name: String

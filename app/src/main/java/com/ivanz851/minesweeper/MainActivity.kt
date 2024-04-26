@@ -21,7 +21,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.ivanz851.minesweeper.Models.User
+import com.ivanz851.minesweeper.models.User
 import com.ivanz851.minesweeper.databinding.ActivityMainBinding
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.vk.sdk.VKAccessToken
@@ -59,11 +59,7 @@ class MainActivity : AppCompatActivity() {
         binding.vkBtn.setOnClickListener {
             signOutEverything()
 
-            VKSdk.login(
-                this,
-                VKScope.FRIENDS.toString()
-            )
-
+            VKSdk.login(this)
         }
 
         binding.btnSignInGoogle.setOnClickListener {
@@ -130,7 +126,7 @@ class MainActivity : AppCompatActivity() {
         if (!VKSdk.onActivityResult(requestCode, resultCode, data, object :
                 VKCallback<VKAccessToken> {
                 override fun onResult(res: VKAccessToken) {
-                    firebaseAuthWithVk(res.accessToken)
+                    firebaseAuthWithVk(res.accessToken, res.userId)
                 }
                 override fun onError(error: VKError) {
                 }
@@ -150,23 +146,28 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun firebaseAuthWithVk(idToken: String) {
-        Log.d(tag, "FLAG - 1")
+    private fun firebaseAuthWithVk(idToken: String, userId: String) {
+        val email = "v-k-o-n-t-a-k-t-e-+$userId@vk.ru"
+        val password = "v-k-o-n-t-a-k-t-e-+$userId-password"
 
-        FirebaseAuth.getInstance().signInWithEmailAndPassword("test414343@ya.ru", "12345678")
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
             .addOnSuccessListener {
                 Log.d(tag, "FLAG - 2")
                 Snackbar.make(binding.root, "SIGN IN SUCCESSFUL", Snackbar.LENGTH_LONG).show()
             }
-            .addOnFailureListener { e ->
+            .addOnFailureListener {
                 Log.d(tag, "FLAG - 3")
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword("test414343@ya.ru", "12345678")
+
+                Log.d(tag, email)
+                Log.d(tag, password)
+
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                     .addOnSuccessListener {
                         val user = User()
-                        user.setEmail("govno@vk.com")
-                        user.setName("FLAGFLAGFLAG")
-                        user.setPassword("12345678865")
-                        user.setPhone("88005553535")
+                        user.setEmail(email)
+                        user.setName("vk_user")
+                        user.setPassword(password)
+                        user.setPhone("00000000000")
 
                         Snackbar.make(binding.root, "SIGN IN SUCCESSFUL", Snackbar.LENGTH_LONG).show()
 

@@ -14,9 +14,9 @@ import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.widget.SwitchCompat
-import com.ivanz851.minesweeper.Listeners.OnGameEndListener
-import com.ivanz851.minesweeper.Listeners.OnHintsCountChangeListener
-import com.ivanz851.minesweeper.Listeners.OnScoreChangeListener
+import com.ivanz851.minesweeper.listeners.OnGameEndListener
+import com.ivanz851.minesweeper.listeners.OnHintsCountChangeListener
+import com.ivanz851.minesweeper.listeners.OnScoreChangeListener
 import kotlin.math.min
 import kotlin.random.Random
 
