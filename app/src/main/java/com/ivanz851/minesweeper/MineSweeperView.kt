@@ -13,6 +13,10 @@ import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.view.View
+import androidx.appcompat.widget.SwitchCompat
+import com.ivanz851.minesweeper.Listeners.OnGameEndListener
+import com.ivanz851.minesweeper.Listeners.OnHintsCountChangeListener
+import com.ivanz851.minesweeper.Listeners.OnScoreChangeListener
 import kotlin.math.min
 import kotlin.random.Random
 
@@ -30,12 +34,20 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
     private var horizontalOffset = 0f
     private var verticalOffset = 0f
 
-
     private lateinit var cells: Array<Array<Cell>>
     private var bitmapMine: Bitmap? = null
     private var bitmapFlag: Bitmap? = null
 
     private var score = 0
+
+    private var hintSwitch: SwitchCompat? = null
+    private var hintsCount: Int = 0
+
+
+
+
+
+
 
 
     private val paintLine = Paint().apply {
@@ -206,32 +218,39 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
 
     private fun revealCell(x: Int, y: Int) {
         val cell = cells[x][y]
-        if (cell.isMine) {
+        if (cell.isRevealed) {
+            return
+        }
+
+        if (hintSwitch?.isChecked == false && cell.isMine) {
             cells.forEach { row ->
                 row.forEach { c ->
                     c.isRevealed = true
                 }
             }
             gameEndListener?.onGameEnd()
-            invalidate()
         } else {
-            if (!cell.isRevealed) {
-                cell.isRevealed = true
-                score++
-                scoreChangeListener?.onScoreChanged(score)
+            cell.isRevealed = true
+            score++
+            scoreChangeListener?.onScoreChanged(score)
 
-                if (cell.mineCount == 0) {
-                    for (xx in x - 1..x + 1) {
-                        for (yy in y - 1..y + 1) {
-                            if (xx in 0 until boardWidth && yy in 0 until boardHeight && !cells[xx][yy].isRevealed) {
-                                revealCell(xx, yy)
-                            }
+            if (cell.mineCount == 0) {
+                for (xx in x - 1..x + 1) {
+                    for (yy in y - 1..y + 1) {
+                        if (xx in 0 until boardWidth && yy in 0 until boardHeight && !cells[xx][yy].isRevealed) {
+                            revealCell(xx, yy)
                         }
                     }
                 }
-                invalidate()
+            }
+
+            if (hintSwitch?.isChecked == true) {
+                hintSwitch?.isChecked = false
+                --hintsCount
+                hintsCountChangeListener?.onHintCountChanged(hintsCount)
             }
         }
+        invalidate()
     }
 
 
@@ -302,21 +321,21 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
         var isFlagged: Boolean = false
     )
 
-    interface OnScoreChangeListener {
-        fun onScoreChanged(score: Int)
-    }
 
     private var scoreChangeListener: OnScoreChangeListener? = null
-
     fun setOnScoreChangeListener(listener: OnScoreChangeListener) {
         scoreChangeListener = listener
     }
 
-    interface OnGameEndListener {
-        fun onGameEnd()
+    private var hintsCountChangeListener: OnHintsCountChangeListener? = null
+    fun setOnHintsCountChangeListener(listener: OnHintsCountChangeListener) {
+        hintsCountChangeListener = listener
     }
 
-    private var gameEndListener: OnGameEndListener? = null
+
+
+
+
 
     fun setOnGameEndListener(listener: OnGameEndListener) {
         gameEndListener = listener
@@ -331,4 +350,15 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
         boardHeight = height
         mineCount = (boardWidth * boardHeight * 0.12).toInt()
     }
+
+    fun setHintSwitch(hintSwitch: SwitchCompat) {
+        this.hintSwitch = hintSwitch
+    }
+
+    fun setHintsCount(hintCount: Int) {
+        this.hintsCount = hintCount
+    }
+
+    private var gameEndListener: OnGameEndListener? = null
+
 }
