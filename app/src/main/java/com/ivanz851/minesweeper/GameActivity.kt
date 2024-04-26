@@ -4,12 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.ivanz851.minesweeper.Listeners.OnGameEndListener
 import com.ivanz851.minesweeper.Listeners.OnHintsCountChangeListener
 import com.ivanz851.minesweeper.Listeners.OnScoreChangeListener
@@ -27,7 +29,10 @@ import com.yandex.mobile.ads.rewarded.RewardedAdEventListener
 import com.yandex.mobile.ads.rewarded.RewardedAdLoadListener
 import com.yandex.mobile.ads.rewarded.RewardedAdLoader
 
+
 class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreChangeListener, OnGameEndListener {
+    private val TAG: String = GameActivity::class.java.simpleName
+
     private lateinit var mineSweeperView: MineSweeperView
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var scoreTextView: TextView
@@ -36,6 +41,8 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
     private lateinit var hintsTextView : TextView
     private lateinit var adView : BannerAdView
     private lateinit var hintSwitch : SwitchCompat
+
+    private lateinit var database: DatabaseReference
 
     private var elapsedTime = 0
     private var isTimerRunning = false
@@ -59,6 +66,8 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
+        database = FirebaseDatabase.getInstance().getReference("Users")
+
         hintSwitch = findViewById(R.id.hintSwitch)
 
         rewardedAdLoader = RewardedAdLoader(this).apply {
@@ -68,22 +77,38 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
                 }
 
                 override fun onAdFailedToLoad(error: AdRequestError) {
-                    // Ad failed to load with AdRequestError.
-                    // Attempting to load a new ad from the onAdFailedToLoad() method is strongly discouraged.
+
                 }
             })
         }
         loadRewardedAd()
 
-
-
-
         highScoreTextView = findViewById(R.id.tvHighScore)
 
         val sharedPrefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        highScore = sharedPrefs.getInt("highScore", 0)
 
-        highScoreTextView.text = String.format(getString(R.string.high_score_text), highScore)
+
+
+        val user = FirebaseAuth.getInstance().currentUser
+
+        if (user == null) {
+            highScore = sharedPrefs.getInt("highScore", 0)
+        } else {
+            database.child(user.uid).get().addOnSuccessListener {
+                if (it.exists()) {
+                    val bestScoreValue = it.child("bestScore").value
+                    if (bestScoreValue is Long) {
+                        highScore = bestScoreValue.toInt()
+                        highScoreTextView.text = String.format(getString(R.string.high_score_text), highScore)
+                    } else {
+
+                    }
+                } else {
+                }
+            }.addOnFailureListener {
+            }
+        }
+
         mineSweeperView = findViewById(R.id.mineSweeperView)
         mineSweeperView.setHintSwitch(hintSwitch)
 
@@ -98,7 +123,6 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
 
 
         MobileAds.initialize(this) {
-            Log.d("MyLog", "Yandex Ads SDK initialized")
         }
 
         adView = findViewById(R.id.banner188)
@@ -145,40 +169,29 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
         rewardedAd?.apply {
             setAdEventListener(object : RewardedAdEventListener {
                 override fun onAdShown() {
-                    // Called when ad is shown.
                 }
 
                 override fun onAdFailedToShow(adError: AdError) {
-                    // Called when an RewardedAd failed to show
-
-                    // Clean resources after Ad failed to show
                     rewardedAd?.setAdEventListener(null)
                     rewardedAd = null
 
-                    // Now you can preload the next rewarded ad.
                     loadRewardedAd()
                 }
 
                 override fun onAdDismissed() {
-                    // Called when ad is dismissed.
-                    // Clean resources after Ad dismissed
                     rewardedAd?.setAdEventListener(null)
                     rewardedAd = null
 
-                    // Now you can preload the next rewarded ad.
                     loadRewardedAd()
                 }
 
                 override fun onAdClicked() {
-                    // Called when a click is recorded for an ad.
                 }
 
                 override fun onAdImpression(impressionData: ImpressionData?) {
-                    // Called when an impression is recorded for an ad.
                 }
 
                 override fun onRewarded(reward: Reward) {
-                    // Called when the user can be rewarded.
                     GetHintAdd()
                 }
             })
@@ -201,8 +214,6 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
 
     private fun GetHintAdd() {
         changeHintsCount(1);
-        // TODO : binding с отображением числа монет (сначала надо переписать весь код выше при помощи binding)
-         //binding.hintCountTextView.text="Hints:$hintsCount"
     }
 
 
@@ -238,25 +249,44 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
         scoreTextView.text = getString(R.string.score, score)
     }
 
-    override fun onGameEnd() {
+    override fun onGameEnd(state: Boolean) {
         isTimerRunning = false
         timerHandler.removeCallbacks(timerRunnable)
 
         val score = mineSweeperView.getCurrentScore()
-        if (score > highScore) {
-            highScore = score
-            val sharedPrefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-            sharedPrefs.edit().putInt("highScore", highScore).apply()
-
-            highScoreTextView.text = String.format(getString(R.string.high_score_text), highScore)
-
+        if (state) {
+            updHighScore(score)
         }
     }
+
+    private fun updHighScore(score: Int) {
+        if (score <= highScore) {
+            return
+        }
+
+        highScore = score
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            val sharedPrefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+            sharedPrefs.edit().putInt("highScore", highScore).apply()
+        } else {
+            highScoreTextView.text = String.format(getString(R.string.high_score_text), highScore)
+            saveHighScoreToFirebase(highScore)
+        }
+    }
+
+    private fun saveHighScoreToFirebase(newHighScore: Int) {
+        val user = FirebaseAuth.getInstance().currentUser ?: return
+        val currentUserRef = database.child(user.uid)
+
+        currentUserRef.child("bestScore").setValue(newHighScore)
+    }
+
 
     fun onClick(p0: View?) {
         when (p0!!.id) {
             R.id.btn_to_main_menu -> {
-                onGameEnd()
+                onGameEnd(false)
                 finish()
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)

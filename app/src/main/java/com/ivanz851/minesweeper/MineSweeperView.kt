@@ -74,7 +74,7 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
     init {
         isFocusable = true
         isFocusableInTouchMode = true
-        generateBoard(boardWidth, boardHeight) // Initialize the cells property
+        generateBoard(boardWidth, boardHeight)
     }
 
     private val gestureDetector = GestureDetector(context, object : SimpleOnGestureListener() {
@@ -228,7 +228,7 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
                     c.isRevealed = true
                 }
             }
-            gameEndListener?.onGameEnd()
+            gameEndListener?.onGameEnd(false)
         } else {
             cell.isRevealed = true
             score++
@@ -269,7 +269,7 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
                     c.isRevealed = true
                 }
             }
-            gameEndListener?.onGameEnd()
+            gameEndListener?.onGameEnd(true)
             invalidate()
         }
     }

@@ -3,7 +3,6 @@ package com.ivanz851.minesweeper
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
@@ -31,8 +30,6 @@ import com.vk.sdk.VKSdk
 import com.vk.sdk.api.VKError
 import com.vk.sdk.util.VKUtil
 
-//import com.vk.api.sdk.VK.onActivityResult
-
 class MainActivity : AppCompatActivity() {
     private val TAG: String = MainActivity::class.java.simpleName
 
@@ -53,8 +50,6 @@ class MainActivity : AppCompatActivity() {
         setupViews()
 
         val fingerprints = VKUtil.getCertificateFingerprint(this, this.packageName)
-        Log.e(TAG, "fingerprint ${fingerprints[0]}")
-        // F2F904290ABD1926526749D8F2033BB80601DF1C
     }
 
     private fun setupBinding() {
@@ -95,7 +90,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.mainBtnStart.setOnClickListener {
-            val intent = Intent(this, GameActivity::class.java)
+            val intent = Intent(this, GameActivity::class.java);
+
             startActivity(intent)
             finish()
         }
@@ -122,9 +118,7 @@ class MainActivity : AppCompatActivity() {
 
         val callback = object : VKAuthCallback, VKCallback<com.vk.sdk.VKAccessToken> {
             override fun onLogin(token: VKAccessToken) {
-                // Получаем идентификатор пользователя VK
                 val userId = token.userId
-
 
                 val emailVk : String = "hahaha"
                 auth.signInWithEmailAndPassword(emailVk, emailVk)
@@ -132,41 +126,32 @@ class MainActivity : AppCompatActivity() {
                         if (authResult.isSuccessful) {
                             Snackbar.make(root, "SIGN IN SUCCESSFUL", Snackbar.LENGTH_LONG).show()
                         } else {
-                            // Ошибка аутентификации Firebase
                         }
 
                 }
             }
 
             override fun onLoginFailed(error: VKAuthException) {
-                // Обработка ошибки аутентификации VK
             }
 
             override fun onResult(res: com.vk.sdk.VKAccessToken?) {
-                TODO("Not yet implemented")
+
             }
 
             override fun onError(error: VKError?) {
-                TODO("Not yet implemented")
+
             }
         }
-        // Передаем callback в VK.onActivityResult
         if (data == null || !VKSdk.onActivityResult(requestCode, resultCode, data, callback)) {
             super.onActivityResult(requestCode, resultCode, data)
         }
 
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
-                // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)!!
-                Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
                 firebaseAuthWithGoogle(account.idToken!!)
             } catch (e: ApiException) {
-                // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e)
             }
         }
     }
@@ -176,13 +161,9 @@ class MainActivity : AppCompatActivity() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithCredential:success")
                     val user = auth.currentUser
                     updateUI(user)
                 } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
                     updateUI(null)
                 }
             }
@@ -278,7 +259,6 @@ class MainActivity : AppCompatActivity() {
                 return@setPositiveButton
             }
 
-            // Registration successful
             auth.createUserWithEmailAndPassword(email.text.toString(), password.text.toString())
                 .addOnSuccessListener {
                     val user = User()
