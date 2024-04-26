@@ -22,7 +22,6 @@ import kotlin.random.Random
 
 
 class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
-
     private var boardWidth = 6
     private var boardHeight = 11
     private var mineCount = (boardWidth * boardHeight * 0.12).toInt()
@@ -44,17 +43,12 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
     private var hintsCount: Int = 0
 
 
-
-
-
-
-
-
     private val paintLine = Paint().apply {
         color = Color.BLACK
         strokeWidth = 5f
         style = Paint.Style.STROKE
     }
+
 
     private fun paintText(textColor: Int): Paint {
         return Paint().apply {
@@ -66,16 +60,19 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
         }
     }
 
+
     private val paintCell = Paint().apply {
         color = Color.argb(0xFF, 0x99, 0x99, 0x99)
         style = Paint.Style.FILL
     }
+
 
     init {
         isFocusable = true
         isFocusableInTouchMode = true
         generateBoard(boardWidth, boardHeight)
     }
+
 
     private val gestureDetector = GestureDetector(context, object : SimpleOnGestureListener() {
         override fun onSingleTapUp(e: MotionEvent): Boolean {
@@ -92,6 +89,7 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
             return true
         }
 
+
         override fun onLongPress(e: MotionEvent) {
             val x = ((e.x - horizontalOffset) / cellSize).toInt()
             val y = ((e.y - verticalOffset) / cellSize).toInt()
@@ -105,6 +103,7 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
             }
         }
     })
+
 
     public override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -125,6 +124,7 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
         bitmapFlag = BitmapFactory.decodeResource(resources, R.drawable.flag)
         bitmapFlag = Bitmap.createScaledBitmap(bitmapFlag!!, cellSize, cellSize, false)
     }
+
 
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
@@ -200,7 +200,6 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
     }
 
 
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event != null) {
@@ -254,6 +253,7 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
     }
 
 
+
     private fun checkWinCondition() {
         var revealedCount = 0
         cells.forEach { row ->
@@ -273,6 +273,7 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
             invalidate()
         }
     }
+
 
     private fun generateBoard(boardWidth: Int, boardHeight: Int) {
         cells = Array(boardWidth) { x ->
@@ -299,11 +300,13 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
 
     }
 
+
     fun resetGame() {
         generateBoard(boardWidth, boardHeight)
         score = 0
         scoreChangeListener?.onScoreChanged(score)
     }
+
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
@@ -327,23 +330,22 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
         scoreChangeListener = listener
     }
 
+
     private var hintsCountChangeListener: OnHintsCountChangeListener? = null
     fun setOnHintsCountChangeListener(listener: OnHintsCountChangeListener) {
         hintsCountChangeListener = listener
     }
 
 
-
-
-
-
     fun setOnGameEndListener(listener: OnGameEndListener) {
         gameEndListener = listener
     }
 
+
     fun getCurrentScore(): Int {
         return score
     }
+
 
     fun setBoardSize(width: Int, height: Int) {
         boardWidth = width
@@ -351,14 +353,11 @@ class MineSweeperView(context: Context, attrs: AttributeSet?) : View(context, at
         mineCount = (boardWidth * boardHeight * 0.12).toInt()
     }
 
+
     fun setHintSwitch(hintSwitch: SwitchCompat) {
         this.hintSwitch = hintSwitch
     }
 
-    fun setHintsCount(hintCount: Int) {
-        this.hintsCount = hintCount
-    }
 
     private var gameEndListener: OnGameEndListener? = null
-
 }

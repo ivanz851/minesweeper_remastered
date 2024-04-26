@@ -7,7 +7,6 @@ import android.widget.Button
 import android.widget.RadioGroup
 
 class DifficultyDialog(private val context: Context) {
-
     private var selectedDifficulty = 0
 
     fun show(onDifficultySelectedListener: (Int) -> Unit) {

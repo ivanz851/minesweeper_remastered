@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.RelativeLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -13,12 +12,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.database.DatabaseReference
+import com.google.firebase.auth.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.database.ValueEventListener
 import com.ivanz851.minesweeper.Models.User
 import com.ivanz851.minesweeper.databinding.ActivityMainBinding
 import com.rengwuxian.materialedittext.MaterialEditText
@@ -31,15 +33,7 @@ import com.vk.sdk.api.VKError
 import com.vk.sdk.util.VKUtil
 
 class MainActivity : AppCompatActivity() {
-    private val TAG: String = MainActivity::class.java.simpleName
-
-    private lateinit var auth: FirebaseAuth
-    private lateinit var firestore : FirebaseFirestore
-
-    private lateinit var db: FirebaseDatabase
-    private lateinit var users: DatabaseReference
-
-    private lateinit var root : RelativeLayout
+    private val tag: String = MainActivity::class.java.simpleName
 
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var binding: ActivityMainBinding
@@ -58,12 +52,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViews() {
-        auth = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance()
-        db = FirebaseDatabase.getInstance()
-        users = db.getReference("Users")
-        root = binding.root
-
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("1024959107236-1h421a50djv6doa8o0j9ua901grhmp04.apps.googleusercontent.com")
             .requestEmail()
@@ -71,21 +59,24 @@ class MainActivity : AppCompatActivity() {
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
-
         binding.vkBtn.setOnClickListener {
+            signOutEverything()
             VKSdk.login(this@MainActivity)
         }
 
-
         binding.btnSignInGoogle.setOnClickListener {
-            signIn()
+            signOutEverything()
+            signInViaGoogle()
         }
 
         binding.btnSignUp.setOnClickListener {
+            signOutEverything()
             showRegisterWindow()
         }
 
         binding.btnSignIn.setOnClickListener {
+            signOutEverything()
+            FirebaseAuth.getInstance().signOut()
             showSignInWindow()
         }
 
@@ -107,7 +98,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun signIn() {
+    private fun signOutEverything() {
+        Firebase.auth.signOut()
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken("1024959107236-1h421a50djv6doa8o0j9ua901grhmp04.apps.googleusercontent.com")
+            .requestEmail()
+            .build()
+
+        val googleSignInClient = GoogleSignIn.getClient(this, gso)
+        googleSignInClient.signOut()
+
+        FirebaseAuth.getInstance().signOut()
+    }
+
+    private fun signInViaGoogle() {
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
@@ -121,17 +126,17 @@ class MainActivity : AppCompatActivity() {
                 val userId = token.userId
 
                 val emailVk : String = "hahaha"
-                auth.signInWithEmailAndPassword(emailVk, emailVk)
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(emailVk, emailVk)
                     .addOnCompleteListener { authResult ->
                         if (authResult.isSuccessful) {
-                            Snackbar.make(root, "SIGN IN SUCCESSFUL", Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(binding.root, "SIGN IN SUCCESSFUL", Snackbar.LENGTH_LONG).show()
                         } else {
                         }
 
                 }
             }
 
-            override fun onLoginFailed(error: VKAuthException) {
+            override fun onLoginFailed(authException: VKAuthException) {
             }
 
             override fun onResult(res: com.vk.sdk.VKAccessToken?) {
@@ -158,11 +163,35 @@ class MainActivity : AppCompatActivity() {
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential)
+        FirebaseAuth.getInstance().signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    val user = auth.currentUser
+                    val user = FirebaseAuth.getInstance().currentUser
                     updateUI(user)
+
+                    user?.let {
+                        val name = user.displayName
+                        val email = user.email+ "@googleauth.com"
+                        val userId = user.uid
+
+                        FirebaseDatabase.getInstance().reference.child("Users").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(object :
+                            ValueEventListener {
+                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                if (!dataSnapshot.exists()) {
+                                    val newUser = User(
+                                        name ?: "",
+                                        email, userId, ""
+                                    )
+
+                                    FirebaseDatabase.getInstance().reference.child("Users").child(userId)
+                                        .setValue(newUser)
+                                }
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                            }
+                        })
+                    }
                 } else {
                     updateUI(null)
                 }
@@ -201,21 +230,21 @@ class MainActivity : AppCompatActivity() {
         }
         dialog.setPositiveButton("Enter") { _, _ ->
             if (TextUtils.isEmpty(email.text.toString())) {
-                Snackbar.make(root, "Enter your email", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(binding.root, "Enter your email", Snackbar.LENGTH_LONG).show()
                 return@setPositiveButton
             }
 
             if (password.text.toString().length < 8) {
-                Snackbar.make(root, "Enter password longer than 8 symbols", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(binding.root, "Enter password longer than 8 symbols", Snackbar.LENGTH_LONG).show()
                 return@setPositiveButton
             }
 
-            auth.signInWithEmailAndPassword(email.text.toString(), password.text.toString())
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(email.text.toString(), password.text.toString())
                 .addOnSuccessListener {
-                    Snackbar.make(root, "SIGN IN SUCCESSFUL", Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(binding.root, "SIGN IN SUCCESSFUL", Snackbar.LENGTH_LONG).show()
                 }
                 .addOnFailureListener { e ->
-                    Snackbar.make(root, "Auth error! ${e.message}", Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(binding.root, "Auth error! ${e.message}", Snackbar.LENGTH_LONG).show()
                 }
         }
 
@@ -242,24 +271,24 @@ class MainActivity : AppCompatActivity() {
         }
         dialog.setPositiveButton("Add") { _, _ ->
             if (TextUtils.isEmpty(email.text.toString())) {
-                Snackbar.make(root, "Enter your email", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(binding.root, "Enter your email", Snackbar.LENGTH_LONG).show()
                 return@setPositiveButton
             }
             if (TextUtils.isEmpty(name.text.toString())) {
-                Snackbar.make(root, "Enter your name", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(binding.root, "Enter your name", Snackbar.LENGTH_LONG).show()
                 return@setPositiveButton
             }
             if (TextUtils.isEmpty(phone.text.toString())) {
-                Snackbar.make(root, "Enter your phone", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(binding.root, "Enter your phone", Snackbar.LENGTH_LONG).show()
                 return@setPositiveButton
             }
             if (password.text.toString().length < 8) {
-                Snackbar.make(root, "Enter password longer than 8 symbols", Snackbar.LENGTH_LONG)
+                Snackbar.make(binding.root, "Enter password longer than 8 symbols", Snackbar.LENGTH_LONG)
                     .show()
                 return@setPositiveButton
             }
 
-            auth.createUserWithEmailAndPassword(email.text.toString(), password.text.toString())
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email.text.toString(), password.text.toString())
                 .addOnSuccessListener {
                     val user = User()
                     user.setEmail(email.text.toString())
@@ -268,14 +297,14 @@ class MainActivity : AppCompatActivity() {
                     user.setPhone(phone.text.toString())
 
 
-                    Snackbar.make(root, "User successfully added!", Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(binding.root, "User successfully added!", Snackbar.LENGTH_LONG).show()
 
                     FirebaseAuth.getInstance().currentUser?.let {
-                        users.child(it.uid)
+                        FirebaseDatabase.getInstance().getReference("Users").child(it.uid)
                             .setValue(user)
                             .addOnSuccessListener {
                                 Snackbar.make(
-                                    root,
+                                    binding.root,
                                     "User successfully added!",
                                     Snackbar.LENGTH_LONG
                                 ).show()
@@ -283,7 +312,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 .addOnFailureListener { e ->
-                    Snackbar.make(root, "Registration ERROR! ${e.message}", Snackbar.LENGTH_LONG)
+                    Snackbar.make(binding.root, "Registration ERROR! ${e.message}", Snackbar.LENGTH_LONG)
                         .show()
                 }
 

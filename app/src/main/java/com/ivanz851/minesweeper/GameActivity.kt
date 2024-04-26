@@ -31,7 +31,7 @@ import com.yandex.mobile.ads.rewarded.RewardedAdLoader
 
 
 class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreChangeListener, OnGameEndListener {
-    private val TAG: String = GameActivity::class.java.simpleName
+    private val tag: String = GameActivity::class.java.simpleName
 
     private lateinit var mineSweeperView: MineSweeperView
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
@@ -87,8 +87,6 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
 
         val sharedPrefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
-
-
         val user = FirebaseAuth.getInstance().currentUser
 
         if (user == null) {
@@ -100,10 +98,7 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
                     if (bestScoreValue is Long) {
                         highScore = bestScoreValue.toInt()
                         highScoreTextView.text = String.format(getString(R.string.high_score_text), highScore)
-                    } else {
-
                     }
-                } else {
                 }
             }.addOnFailureListener {
             }
@@ -119,9 +114,6 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
         timerTextView = findViewById(R.id.tvTimer)
         hintsTextView.text = getString(R.string.hints, 0)
 
-
-
-
         MobileAds.initialize(this) {
         }
 
@@ -132,10 +124,6 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
 
         val adRequest = AdRequest.Builder().build()
         adView.loadAd(adRequest)
-
-
-
-
 
 
         mineSweeperView.setOnHintsCountChangeListener(this)
@@ -155,10 +143,6 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
 
         mineSweeperView.setOnGameEndListener(this)
     }
-
-
-
-
 
     private fun loadRewardedAd() {
         val adRequestConfiguration = AdRequestConfiguration.Builder("demo-rewarded-yandex").build()
@@ -192,12 +176,13 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
                 }
 
                 override fun onRewarded(reward: Reward) {
-                    GetHintAdd()
+                    changeHintsCount(1)
                 }
             })
             show(this@GameActivity)
         }
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -207,26 +192,11 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
         destroyRewardedAd()
     }
 
+
     private fun destroyRewardedAd() {
         rewardedAd?.setAdEventListener(null)
         rewardedAd = null
     }
-
-    private fun GetHintAdd() {
-        changeHintsCount(1);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     private fun resetGame() {
@@ -245,19 +215,22 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
         changeHintsCount(-1)
     }
 
+
     override fun onScoreChanged(score: Int) {
         scoreTextView.text = getString(R.string.score, score)
     }
 
-    override fun onGameEnd(state: Boolean) {
+
+    override fun onGameEnd(winState: Boolean) {
         isTimerRunning = false
         timerHandler.removeCallbacks(timerRunnable)
 
         val score = mineSweeperView.getCurrentScore()
-        if (state) {
+        if (winState) {
             updHighScore(score)
         }
     }
+
 
     private fun updHighScore(score: Int) {
         if (score <= highScore) {
@@ -274,6 +247,7 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
             saveHighScoreToFirebase(highScore)
         }
     }
+
 
     private fun saveHighScoreToFirebase(newHighScore: Int) {
         val user = FirebaseAuth.getInstance().currentUser ?: return
@@ -297,8 +271,8 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
             R.id.settings_btn -> {
                 val difficultyDialog = DifficultyDialog(this)
                 difficultyDialog.show { selectedDifficulty ->
-                    var newWidth: Int = 5
-                    var newHeight: Int = 5
+                    var newWidth = 5
+                    var newHeight = 5
                     when (selectedDifficulty) {
                         0 -> {
                             newWidth = 5
@@ -327,16 +301,7 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
                     resetGame()
                 }
             }
-
         }
-
-    }
-    private fun restartActivity(selectedDifficulty: Int) {
-        val intent = intent.apply {
-            putExtra("difficulty", selectedDifficulty)
-        }
-        finish()
-        startActivity(intent)
     }
 
 
@@ -344,8 +309,9 @@ class GameActivity : AppCompatActivity(), OnHintsCountChangeListener, OnScoreCha
         hintSwitch.isEnabled = hintsCount > 0
     }
 
+
     private fun changeHintsCount(delta: Int) {
-        hintsCount += delta;
+        hintsCount += delta
         updateHintSwitchAvailability()
         hintsTextView.text = getString(R.string.hints, hintsCount)
     }

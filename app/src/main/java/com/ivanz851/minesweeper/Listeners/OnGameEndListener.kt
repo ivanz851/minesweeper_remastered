@@ -1,5 +1,5 @@
 package com.ivanz851.minesweeper.Listeners
 
 interface OnGameEndListener {
-    fun onGameEnd(state: Boolean)
+    fun onGameEnd(winState: Boolean)
 }
