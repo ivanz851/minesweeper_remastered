@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "1024959107236-hrltc76spl93duo40q69bic0gs2duq0v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ivanz851.minesweeper",
+            "certificate_hash": "77c0e7ea43217f0d7a02054b794b2f31c8907b0d"
+          }
+        },
+        {
           "client_id": "1024959107236-1h421a50djv6doa8o0j9ua901grhmp04.apps.googleusercontent.com",
           "client_type": 3
         }
