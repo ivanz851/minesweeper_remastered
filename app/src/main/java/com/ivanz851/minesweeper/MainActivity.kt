@@ -140,6 +140,8 @@ class MainActivity : AppCompatActivity() {
                 val account = task.getResult(ApiException::class.java)!!
                 firebaseAuthWithGoogle(account.idToken!!)
             } catch (e: ApiException) {
+                val errorMessage = "Google Sign In Exception: ${e.message}"
+                Snackbar.make(binding.root, errorMessage, Snackbar.LENGTH_LONG).show()
             }
         }
     }
@@ -207,6 +209,7 @@ class MainActivity : AppCompatActivity() {
                         })
                     }
                 } else {
+                    Snackbar.make(binding.root, "GOOGLE SIGN IN ERROR!", Snackbar.LENGTH_LONG).show()
                 }
             }
     }
@@ -318,8 +321,6 @@ class MainActivity : AppCompatActivity() {
                     user.setName(name.text.toString())
                     user.setPassword(password.text.toString())
                     user.setPhone(phone.text.toString())
-
-                    Snackbar.make(binding.root, "User successfully added!", Snackbar.LENGTH_LONG).show()
 
                     FirebaseAuth.getInstance().currentUser?.let {
                         FirebaseDatabase.getInstance().getReference("Users").child(it.uid)
