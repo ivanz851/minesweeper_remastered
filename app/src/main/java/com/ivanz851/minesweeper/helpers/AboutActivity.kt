@@ -1,9 +1,11 @@
-package com.ivanz851.minesweeper
+package com.ivanz851.minesweeper.helpers
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.ivanz851.minesweeper.MainActivity
+import com.ivanz851.minesweeper.R
 
 class AboutActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

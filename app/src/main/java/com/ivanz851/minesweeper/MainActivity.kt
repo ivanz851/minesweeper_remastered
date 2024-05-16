@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.ivanz851.minesweeper.databinding.ActivityMainBinding
+import com.ivanz851.minesweeper.helpers.AboutActivity
 import com.ivanz851.minesweeper.models.User
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.vk.sdk.VKAccessToken
@@ -148,8 +149,8 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun firebaseAuthWithVk(idToken: String, userId: String) {
-        val email = "v-k-o-n-t-a-k-t-e-+$userId@vk.ru"
-        val password = "v-k-o-n-t-a-k-t-e-+$userId-password"
+        val email = "vkauth-+$userId@vkauth.ru"
+        val password = "vkauth-+$userId-password"
 
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
             .addOnSuccessListener {

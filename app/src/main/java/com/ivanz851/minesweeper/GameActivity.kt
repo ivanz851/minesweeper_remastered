@@ -12,6 +12,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.ivanz851.minesweeper.helpers.DifficultyDialog
 import com.ivanz851.minesweeper.listeners.OnGameEndListener
 import com.ivanz851.minesweeper.listeners.OnHintsCountChangeListener
 import com.ivanz851.minesweeper.listeners.OnScoreChangeListener
