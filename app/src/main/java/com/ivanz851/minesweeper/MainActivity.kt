@@ -149,7 +149,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun firebaseAuthWithVk(idToken: String, userId: String) {
-        val email = "vkauth-+$userId@vkauth.ru"
+        val email = "vkauthorized-+$userId@vkauth.ru"
         val password = "vkauth-+$userId-password"
 
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
