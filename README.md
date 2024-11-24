@@ -14,6 +14,9 @@
 Есть возможность выбора уровня сложности, от которого зависит размер игрового поля и число мин на поле.
 \
 \
+[Основная директория с кодом](https://github.com/ivanz851/minesweeper_remastered/tree/main/App/app/src/main/java/com/ivanz851/minesweeper)
+\
+\
 [Отчет по проекту](https://github.com/ivanz851/minesweeper_remastered/blob/main/Documentation/Project_report.pdf)
 \
 \
