@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name">Minesweeper</string>
+    <string name="high_score">High Score: 0</string>
+    <string name="score">Score: %1$d</string>
+    <string name="score_default">Score: %d</string>
+    <string name="high_score_text">High Score: %1$d</string>
+    <string name="time">Time: %d</string>
+    <string name="hints">Hints: %d</string>
+    <string name="main_btn_start">Start</string>
+    <string name="main_btn_about">About</string>
+    <string name="main_btn_exit">Exit</string>
+    <string name="about_text">Credits:\nIvan Zakharov\nIvan.zakharov.ru@yandex.ru\n</string>
+    <string name="btn_to_main_menu">Back to main menu</string>
+
+    <string name="app_name_after">MINESWEEPER</string>
+
+    <string name="btn_sign_in">Sign in</string>
+    <string name="btn_sign_up">Sign up</string>
+
+
+    <!-- Google button -->
+
+    <string name="create_an_account">Create an account</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="game_rules_text">
+        Minesweeper is a puzzle game that features a grid of clickable cells with hidden mines
+        scattered across the playing field. The goal of the game is to place all the cells with
+        mines and open all the cells that do not contain mines. The player gradually opens
+        the cells (or marks them mined) using hints about the number of adjacent mines shown in
+        the opened cells.
+        \n\n
+        Click on the gear button to select the difficulty level.
+        \n\n
+        Click the button with the light bulb to watch ads and get the opportunity to
+        use the hint in the passage.
+        \n\n
+        To enable the safe mode of opening the cells, switch the toggle switch above the
+        advertising banner (first make sure you have enough hints).
+        \n\n
+        To start a new game, just swipe down the screen.
+    </string>
+    <string name="back_to_main_menu_button_text">Main menu</string>
+    <string name="hint_switch_text">Use hint</string>
+    <string name="about_button_text">About</string>
+    <string name="exit_button_text">Exit</string>
+
+
+    <!-- Vk button -->
+    <integer name="com_vk_sdk_AppId"> 51912479 </integer>
+
+</resources>

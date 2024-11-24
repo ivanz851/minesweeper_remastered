@@ -1,0 +1,29 @@
+# ИГНОРИРУЕМ СИСТЕМНЫЕ ФАЙЛЫ
+.DS_Store
+Thumbs.db
+
+# ИГНОРИРУЕМ СБОРКУ
+.gradle/
+build/
+.idea/
+*.iml
+
+# ФАЙЛЫ СЕКРЕТОВ И ЛОКАЛЬНЫХ НАСТРОЕК
+local.properties
+keystore_file.jks
+
+# NODE И ЛОК-ФАЙЛЫ (ЕСЛИ ЕСТЬ NODE.JS)
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# GRADLE КЭШИ И ЛОГИ
+.gradle/
+*.log
+
+# ФАЙЛЫ, ГЕНЕРИРУЕМЫЕ ОС ИЛИ ИНСТРУМЕНТАМИ
+*.bak
+*.swp
+*.tmp
+*.lock
